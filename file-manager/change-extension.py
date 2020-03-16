@@ -22,18 +22,17 @@ args = parser.parse_args()
 class MyHandler(FileSystemEventHandler):
 
     def on_any_event(self, event):
-        for filename in os.listdir("./change-extension"):
-
-            src = "./change-extension/" + filename
-            if os.path.splitext(filename)[1] == '.' + args.init:
-                os.rename(src, "./change-extension/" +
-                          os.path.splitext(filename)[0] + "." + args.end)
+        for filename in os.listdir("./foo"):
+            name, extension = os.path.splitext(filename)
+            src = "./foo/" + name
+            if extension == '.' + args.init:
+                os.rename(src, "./foo/" + name + "." + args.end)
 
 
 if __name__ == '__main__':
     event_handler = MyHandler()
     observer = Observer()
-    observer.schedule(event_handler, "./change-extension", recursive=True)
+    observer.schedule(event_handler, "./foo", recursive=True)
     observer.start()
 
     try:
