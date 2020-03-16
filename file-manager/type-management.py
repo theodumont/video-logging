@@ -8,7 +8,7 @@ EXT_AUDIO = ['.wav', '.mp3', '.raw', '.wma']
 EXT_VIDEO = ['.mp4', '.m4a', '.m4v', '.f4v', '.f4a', '.f4b', '.m4b', '.m4r', '.avi', '.wmv', '.flv']
 EXT_IMAGE = ['.jpeg', '.jpg', '.png', '.svg', '.bmp', '.gif']
 EXT_DOCUMENT = ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf', '.xlsx', '.pptx']
-EXT_FOLDER = ['.rar']
+EXT_FOLDER = ['.rar', '.zip']
 
 
 # folder we want to sort
