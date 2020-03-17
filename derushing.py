@@ -1,4 +1,7 @@
 # encoding: utf-8
+"""
+Cleans a folder to simplify the derushing process.
+"""
 
 import os
 import time
@@ -19,10 +22,12 @@ time_limit = 2
 
 parser = argparse.ArgumentParser()
 parser.add_argument("folder_to_sort", type=str, help="folder to clean")
-parser.add_argument("-s", "--sort", action="store_true",
-                    help="organizes the folder")
-parser.add_argument("-d", "--delete", action="store_true",
-                    help="deletes the useless videos")
+parser.add_argument("-f", "--folder", action="store_true",
+                    help="organize the folder by file type")
+parser.add_argument("-t", "--trash", action="store_true",
+                    help="trash the very short videos")
+parser.add_argument("-d", "--date", action="store_true",
+                    help="sort videos in directories by date")
 args = parser.parse_args()
 
 os.chdir(args.folder_to_sort)
@@ -30,17 +35,21 @@ os.chdir(args.folder_to_sort)
 
 class MyCleaner():
 
-    def __init__(self, folder_to_sort):
+    """
+    Cleans a folder.
+    """
+
+    def __init__(self, folder_to_sort, time_limit):
         """
-        Class initialization
+        Class initialization.
         """
         self.folder_to_sort = folder_to_sort
         self.time_limit = time_limit
 
-    def sort(self):
+    def folder_sort(self):
         """
-        Sort the files in folders according to their extension.
-        Create directories if they don't exist.
+        Sorts the files into directories according to their extension.
+        Creates the directories if they don't exist.
         """
         print(">> Sorting files...\n")
         moved = "   -> moved"
@@ -75,12 +84,16 @@ class MyCleaner():
                 else:
                     print(" Other          {0}{1}".format(file, moved))
                     os.rename(file, 'Other/' + file)
+            time.sleep(.1)
         print(">> Files sorted!\n")
 
-    def delete_trash_videos(self):
+    def trash_videos(self):
         """
-        Delete the videos that are shorter than self.time_limit
+        Trashes the videos that are shorter than self.time_limit to get rid of
+        all the shooting errors.
         """
+        if not os.path.isdir('Audio'):
+            self.folder_sort()
         print(">> Trashing files...\n")
         if not os.path.isdir('Videos/Trash'):
             os.mkdir('Videos/Trash')
@@ -99,11 +112,39 @@ class MyCleaner():
                 print(" {0}     {1:.1f} s{2}".format(file, duration, deleted))
         print(">> Files trashed!\n")
 
+    def sort_videos(self):
+        """
+        Sorts videos in directories by date to simplifiy the derushing process.
+        """
+        print(">> Sorting videos by date...\n")
+        if not os.path.isdir('Audio'):
+            self.folder_sort()
+        sep = ' ' + 50*'-'
+        print("File name".center(25) + "      Created on\n"+sep)
+        for file in os.listdir('./Videos'):
+            if not os.path.isdir('Videos/' + file):
+                path = 'Videos/' + file
+                creation = time.localtime(os.path.getmtime(path))
+                destination = time.strftime('%y%m%d-%a', creation)
+                print((file.center(25) + '{0}   -> moved to {1}').format(
+                      time.strftime('%c', creation),
+                      destination))
+                if not os.path.isdir('Videos/' + destination):
+                    os.mkdir('Videos/' + destination)
+                os.rename('Videos/' + file, 'Videos/' + destination + '/' + file)
+
+                time.sleep(.1)
+
 
 if __name__ == '__main__':
+    # main program
     print('** Cleanup of the {} folder **\n'.format(args.folder_to_sort))
-    cleaner = MyCleaner(args.folder_to_sort)
-    if args.sort:
-        cleaner.sort()
-    if args.delete:
-        cleaner.delete_trash_videos()
+
+    cleaner = MyCleaner(args.folder_to_sort, time_limit)
+
+    if args.folder:
+        cleaner.folder_sort()
+    if args.trash:
+        cleaner.trash_videos()
+    if args.date:
+        cleaner.sort_videos()
