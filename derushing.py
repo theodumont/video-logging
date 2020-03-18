@@ -18,24 +18,15 @@ EXT_DOCUMENT = ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf',
 EXT_FOLDER = ['.rar', '.zip']
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument("folder_to_sort", type=str, help="folder to clean")
-parser.add_argument("-f", "--folder", action="store_true",
-                    help="organize the folder by file type")
-parser.add_argument("-t", "--trash", action="store_true",
-                    help="trash the very short videos")
-parser.add_argument("-d", "--date", action="store_true",
-                    help="sort videos in directories by date")
-args = parser.parse_args()
-
-os.chdir(args.folder_to_sort)
+os.chdir('foo')
 
 
-def folder_sort():
+def folder_sort(folder):
     """
     Sorts the files into directories according to their extension.
     Creates the directories if they don't exist.
     """
+    # os.chdir(folder)
     bprint("Sorting files...\n")
     moved = "   -> moved"
     if not os.path.isdir('Audio'):
@@ -73,16 +64,15 @@ def folder_sort():
     bprint("Files sorted by type!")
 
 
-def trash_videos(time_limit):
+def trash_videos(folder, time_limit):
     """
     Trashes the videos that are shorter than .time_limit to get rid of
     all the shooting errors.
     """
+    # os.chdir(folder)
     if not os.path.isdir('Audio'):
         folder_sort()
     bprint("Trashing files of duration <= {}s...\n".format(time_limit))
-    if not os.path.isdir('Videos/Trash'):
-        os.mkdir('Videos/Trash')
     bprint("  File name      Duration\n", 3)
     bprint(" -------------------------", 3)
     for file in os.listdir('./Videos'):
@@ -93,19 +83,22 @@ def trash_videos(time_limit):
             time.sleep(.1)
             deleted = ""
             if duration < time_limit:
+                if not os.path.isdir('Videos/Trash'):
+                    os.mkdir('Videos/Trash')
                 os.rename('Videos/' + file, 'Videos/Trash/' + file)
                 deleted = "   -> moved to '/Trash'"
             bprint(" {0}     {1:.1f} s{2}".format(file, duration, deleted), 3)
     bprint("Files trashed!")
 
 
-def sort_videos():
+def sort_videos(folder):
     """
     Sorts videos in directories by date to simplifiy the derushing process.
     """
+    # os.chdir(folder)
     bprint("Sorting videos by date...\n")
     if not os.path.isdir('Audio'):
-        folder_sort()
+        folder_sort(folder)
     sep = ' ' + 50*'-'
     bprint("File name".center(25) + "      Created on\n"+sep, 3)
     for file in os.listdir('./Videos'):
@@ -122,6 +115,7 @@ def sort_videos():
 
             time.sleep(.04)
     bprint("Videos sorted by date!")
+
 
 def bprint(msg, mode=0):
     # mode 0 means information, 1 means warning and 2 means error

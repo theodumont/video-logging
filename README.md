@@ -8,18 +8,19 @@ To derush the `foo` folder, run in shell:
 ```bash
 cd location_of_foo
 pip install -r requirements
-python derushing.py foo -sd
+python cli.py -f foo
 ```
-The parameters are:
+The arguments are:
 ```bash
-usage: derushing.py [-h] [-f] [-t] [-d] folder_to_sort
+usage: cli.py [-h] [-f FOLDER]
 
-positional arguments:
-  folder_to_sort  folder to clean
+Command line frontend used to derush before video editing.
 
 optional arguments:
-  -h, --help      show this help message and exit
-  -f, --folder    organize the folder by file type
-  -t, --trash     trash the very short videos
-  -d, --date      sort videos in directories by date
+  -h, --help            show this help message and exit
+  -f FOLDER, --folder FOLDER
+                        folder to sort
+
+This tool was designed by Théo Dumont and all the source code is available at
+https://github.com/theodumont/derushing-python under the GPL 3 License.
 ```

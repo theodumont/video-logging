@@ -30,7 +30,7 @@ class CLI(object):
         # To leave the tool.
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
         # folder
-        self.folder_to_sort = cli_args.folder
+        self.folder = cli_args.folder
 
     def read_command(self, command):
         # cursor is used to keep track of how many argument we read from the users command.
@@ -43,13 +43,13 @@ class CLI(object):
         instruction = split_command[0]
         cursor += 1
         if instruction in self.clean_list:
-            return self.process_clean()
+            return self.process_clean(self.folder)
         elif instruction in self.folder_list:
-            return self.process_folder()
+            return self.process_folder(self.folder)
         elif instruction in self.trash_list:
-            return self.process_trash(split_command, cursor)
+            return self.process_trash(self.folder, split_command, cursor)
         elif instruction in self.date_list:
-            return self.process_date()
+            return self.process_date(self.folder)
         elif instruction in self.help_list:
             return self.process_help(split_command, cursor)
         elif instruction in self.exit_list:
@@ -63,38 +63,39 @@ class CLI(object):
         dr.bprint("Leaving the tool...")
         sys.exit(0)
 
-    def process_folder(self):
-        dr.folder_sort()
+    def process_folder(self, folder):
+        dr.folder_sort(folder)
 
-    def process_trash(self, split_command, cursor):
+    def process_trash(self, folder, split_command, cursor):
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
             dr.bprint(f"What time limit do you want to impose?", 1)
             dr.bprint(f"The syntax to choose the time limit is:\n'>> trash <time limit>'\nTime limit has to be a positive int value.")
         else:
-           time_limit = split_command[cursor]
-           cursor += 1
-           try:
-               int_time_limit = int(time_limit)
-               if int_time_limit <= 0:
-                   dr.bprint(f"You asked the tool to take {time_limit} as a time limit, but negative (zero included) values are not valid in that context. Please input a positive integer.", 2)
-                   return
-               else:
-                   dr.trash_videos(int_time_limit)
-           except ValueError as e:
-               dr.bprint(f"The value of the step frequency has to be a positive int, but the tool could not parse {time_limit} as an int. The correct syntax to set the time limit is :\n'>> trash <time limit>'", 2)
-               return
+            time_limit = split_command[cursor]
+            cursor += 1
+            try:
+                int_time_limit = int(time_limit)
+                if int_time_limit <= 0:
+                    dr.bprint(f"You asked the tool to take {time_limit} as a time limit, but negative (zero included) values are not valid in that context. Please input a positive integer.", 2)
+                    return
+                else:
+                    dr.trash_videos(folder, int_time_limit)
+            except ValueError as e:
+                dr.bprint(f"The value of the step frequency has to be a positive int, but the tool could not parse {time_limit} as an int. The correct syntax to set the time limit is :\n'>> trash <time limit>'", 2)
+                return
 
-    def process_date(self):
-        dr.sort_videos()
+    def process_date(self, folder):
+        dr.sort_videos(folder)
 
-    def process_clean(self, split_command, cursor):
+    def process_clean(self, folder, split_command, cursor):
         self.process_folder()
         self.process_trash(split_command, cursor)
         self.process_date()
 
     def process_help(self, split_command, cursor):
         return
+
 
 if __name__ == '__main__':
     os.system('cls')
