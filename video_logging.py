@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-Cleans a folder to simplify the derushing process.
+Cleans a folder to simplify the video logging process.
 """
 
 import os
@@ -146,7 +146,7 @@ def bprint(msg, mode=0):
         print(f"     {wrapped_msg}")
         return
     elif mode == 4:
-        print(f"(derush) {wrapped_msg}")
+        print(f"(log)  {wrapped_msg}")
         return
     else:   # i.e. mode == 0
         print(f"---> {wrapped_msg}")

@@ -1,4 +1,4 @@
-# Video Editing Derushing
+# Video logging for editing
 
 Python script that can be used to quickly organize rushes from a video shooting session.
 
