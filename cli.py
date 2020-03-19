@@ -7,12 +7,7 @@ import os
 import sys
 import argparse
 try:
-    import numpy as np
-except ImportError:
-    print("---X This tools requires the numpy module, which seems currently unavailable. Please install numpy before tying to use this tool. The recommended syntax to install numpy is :\n$ python3 -m pip install numpy")
-    sys.exit(1)
-try:
-    import derushing as dr  # Our module to command the robot.
+    import derushing as dr
 except ImportError:
     print("---X This command line tool is an interface to a python module called derushing. In order to use this tool you must first make sure that this module is available (it currently isn't). The recommended way to do this is to grab the source code derushing.py and put it in the same directory as this cli.py file. The source code for derushing is available freely on GitHub at https://github.com/theodumont/derushing-python.")
     sys.exit(1)
@@ -24,12 +19,10 @@ class CLI(object):
     def __init__(self):
         # List of all parameters accepted to trigger the different modes.
         self.change_list = ["change", "cd"]
-        self.all_list = ["all"]
         self.folder_list = ["folder"]
         self.trash_list = ["trash"]
         self.date_list = ["time", "date"]
         self.help_list = ["help", "h", "?"]
-        self.ls_list = ["ls", "dir", "show"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
         # folder to clean
         self.folder = os.getcwd()
@@ -48,9 +41,6 @@ class CLI(object):
         if instruction.lower() in self.change_list:
             return self.process_change_dir(split_command, cursor)
 
-        elif instruction.lower() in self.all_list:
-            return self.process_all(split_command, cursor)
-
         elif instruction.lower() in self.folder_list:
             return self.process_folder()
 
@@ -62,9 +52,6 @@ class CLI(object):
 
         elif instruction.lower() in self.help_list:
             return self.process_help(split_command, cursor)
-
-        elif instruction.lower() in self.ls_list:
-            return self.process_ls()
 
         elif instruction.lower() in self.exit_list:
             return self.exit()
@@ -119,19 +106,47 @@ class CLI(object):
                 else:
                     dr.trash_videos(self.folder, int_time_limit)
             except ValueError as e:
-                dr.bprint(f"The value of the step frequency has to be a positive int, but the tool could not parse {time_limit} as an int. The correct syntax to set the time limit is :\n'>> trash <time limit>'", 2)
+                dr.bprint(f"The value of the time_limit has to be a positive int, but the tool could not parse {time_limit} as an int. The correct syntax to choose the time limit is :\n'>> trash <time limit>'", 2)
                 return
 
     def process_date(self):
         dr.sort_by_date(self.folder)
 
-    def process_all(self, split_command, cursor):
-        self.process_folder()
-        self.process_trash(split_command, cursor)
-        self.process_date()
-
     def process_help(self, split_command, cursor):
-        return
+        if len(split_command) == cursor:
+            # i.e. no more arguments to read, just printing command list.
+            command_help = (
+            "All possible input commands are :\n\n"
+            " - change : Changes the current directory. For more information about change, please use 'help change'.\n"
+            " - folder : Sorts the current directory files in folders. For more information folder, please use 'help folder'.\n"
+            " - trash : \n"
+            " - date : \n"
+            " - help : Brings out various help message, including this one.\n"
+            " - exit : Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).\n"
+            )
+            dr.bprint(command_help)
+            return
+        else:
+            topic = split_command[cursor]
+            cursor += 1
+            if topic in self.exit_list:
+                dr.bprint("The exit command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).")
+                return
+            elif topic in self.change_list:
+                dr.bprint("the change command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'")
+                return
+            elif topic in self.folder_list:
+                dr.bprint("folder help")
+                return
+            elif topic in self.trash_list:
+                dr.bprint("trash help")
+                return
+            elif topic in self.date_list:
+                dr.bprint("date help")
+                return
+            elif topic in self.help_list:
+                dr.bprint("Why are you here?")
+                return
 
 
 def display(cli):

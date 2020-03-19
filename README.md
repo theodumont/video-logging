@@ -2,25 +2,35 @@
 
 Python script that can be used to quickly organize rushes from a video shooting session.
 
-## Installation
+## 1. Installation
 
-To derush the `foo` folder, run in shell:
+To use this tool, type in a shell:
 ```bash
-cd location_of_foo
+cd location_of_cli
 pip install -r requirements
-python cli.py -f foo
+python cli.py
 ```
-The arguments are:
+
+Don't hesitate to use the `help` command to understand the different functions of the tool.
+
+## 2. Features
+
+To naviguate trough directories, you can use the `cd` command.
+
+### 2.1. Sort by extension
+To sort files by extension, type:
 ```bash
-usage: cli.py [-h] [-f FOLDER]
+folder
+```
 
-Command line frontend used to derush before video editing.
+### 2.2. Trash useless videos
+To trash the videos of length shorter than `time_limit`, type:
+```bash
+trash <time_limit>
+```
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -f FOLDER, --folder FOLDER
-                        folder to sort
-
-This tool was designed by Théo Dumont and all the source code is available at
-https://github.com/theodumont/derushing-python under the GPL 3 License.
+### 2.3. Sort by date
+To sort files by date, type:
+```bash
+date
 ```
