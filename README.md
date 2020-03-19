@@ -15,22 +15,22 @@ Don't hesitate to use the `help` command to understand the different functions o
 
 ## 2. Features
 
-To naviguate trough directories, you can use the `cd` command.
+To naviguate trough directories, you can use the `>> cd` command.
 
 ### 2.1. Sort by extension
 To sort files by extension, type:
 ```bash
-folder
+>> folder
 ```
 
 ### 2.2. Trash useless videos
 To trash the videos of length shorter than `time_limit`, type:
 ```bash
-trash <time_limit>
+>> trash <time_limit>
 ```
 
 ### 2.3. Sort by date
 To sort files by date, type:
 ```bash
-date
+>> date
 ```
