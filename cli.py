@@ -21,7 +21,7 @@ except ImportError:
 class CLI(object):
     """docstring for CLI."""
 
-    def __init__(self, cli_args):
+    def __init__(self):
         # List of all parameters accepted to trigger the different modes.
         self.change_list = ["change", "cd"]
         self.all_list = ["all"]
@@ -123,7 +123,7 @@ class CLI(object):
                 return
 
     def process_date(self):
-        dr.sort_videos(self.folder)
+        dr.sort_by_date(self.folder)
 
     def process_all(self, split_command, cursor):
         self.process_folder()
@@ -148,12 +148,7 @@ def display(cli):
 
 if __name__ == '__main__':
     os.system('cls')
-    # Command line arguments parsing
-    parser = argparse.ArgumentParser(description='Command line frontend used to derush before video editing.', epilog="This tool was designed by Théo Dumont and all the source code is available at https://github.com/theodumont/derushing-python under the GPL 3 License.")
-    parser.add_argument("-f", "--folder", type=str, help="folder to sort")
-    args = parser.parse_args()
-
-    cli = CLI(args)
+    cli = CLI()
 
     display(cli)
 

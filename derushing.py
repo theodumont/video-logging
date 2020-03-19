@@ -22,19 +22,25 @@ EXTENSIONS = {
 }
 
 
-def move_to_subdir(file, subdir, to_move):
-    if not os.path.isdir(subdir):
-        os.mkdir('./{}'.format(subdir))
-    if to_move:
-        os.rename(file, f'{subdir}/{file}')
-        bprint(" {1}          {0}{2}".format(file, subdir, "    (moved)"), 3)
-
-
 def folder_sort(folder):
     """
     Sorts the files into directories according to their extension.
     Creates the directories if they don't exist.
     """
+
+    def move_to_subdir(file, subdir, to_move):
+        """
+        Moves file to subdir if necessary.
+        """
+        if not os.path.isdir(subdir):
+            os.mkdir('./{}'.format(subdir))
+        if to_move:
+            os.rename(file, f'{subdir}/{file}')
+            bprint(" {1}          {0}{2}".format(file, subdir, "    (moved)"), 3)
+        else:
+            bprint(" {1}          {0}".format(file, 'Script'), 3)
+
+
     print("")
     bprint("Sorting files...\n")
 
@@ -54,7 +60,7 @@ def folder_sort(folder):
                     else:
                         move_to_subdir(file, d, False)
                 treated = True
-                break  # on ne regarde pas les autres dirs
+                break  # don't look at the remaining dirs
         if not treated:
             move_to_subdir(file, d, True)
 
@@ -64,54 +70,63 @@ def folder_sort(folder):
 
 def trash_videos(folder, time_limit):
     """
-    Trashes the videos that are shorter than .time_limit to get rid of
+    Trashes the videos that are shorter than time_limit to get rid of
     all the shooting errors.
     """
-    if not os.path.isdir('Audio'):
-        folder_sort(folder)
+
+    def move_to_trash(file, duration):
+        """
+        Moves a video to Trash if it is too short.
+        """
+        if duration < time_limit:
+            if not os.path.isdir('Trash'):
+                os.mkdir('./Trash')
+            os.rename(file, f'Trash/{file}')
+            bprint(" {0}     {1:.1f} s    (trashed)".format(file, duration), 3)
+        else:
+            bprint(" {0}     {1:.1f} s".format(file, duration), 3)
+
+    print("")
     bprint("Trashing files of duration <= {}s...\n".format(time_limit))
+
     bprint("  File name      Duration\n", 3)
     bprint(" -------------------------", 3)
-    for file in os.listdir('./Videos'):
-        if not os.path.isdir('Videos/' + file):
-            clip = VideoFileClip('Videos/' + file)
+    for file in os.listdir():
+        name, extension = os.path.splitext(file)
+        if extension in EXTENSIONS['Videos']:
+            clip = VideoFileClip(file)
+            time.sleep(.001)
             duration = clip.duration
             clip.close()
-            time.sleep(.1)
-            deleted = ""
-            if duration < time_limit:
-                if not os.path.isdir('Videos/Trash'):
-                    # os.mkdir('Videos/Trash')
-                    pass
-                # os.rename('Videos/' + file, 'Videos/Trash/' + file)
-                deleted = "   -> moved to '/Trash'"
-            bprint(" {0}     {1:.1f} s{2}".format(file, duration, deleted), 3)
+            to_trash = ""
+            move_to_trash(file, duration)
+
+    print("")
     bprint("Files trashed!")
 
 
-def sort_videos(folder):
+def sort_by_date(folder):
     """
-    Sorts videos in directories by date to simplifiy the derushing process.
+    Sorts files in directories by date.
     """
-    bprint("Sorting videos by date...\n")
-    if not os.path.isdir('Audio'):
-        folder_sort(folder)
+
+    print("")
+    bprint("Sorting files by date...\n")
+
     sep = ' ' + 50*'-'
     bprint("File name".center(25) + "      Created on\n"+sep, 3)
-    for file in os.listdir('./Videos'):
-        if not os.path.isdir('Videos/' + file):
-            path = 'Videos/' + file
-            creation = time.localtime(os.path.getmtime(path))
+    for file in os.listdir():
+        if not os.path.isdir(file):
+            time.sleep(.001)
+            creation = time.localtime(os.path.getmtime(file))
             destination = time.strftime('%y%m%d-%a', creation)
+            if not os.path.isdir(destination):
+                os.mkdir(destination)
+            os.rename(file, destination + '/' + file)
             bprint((file.center(25) + '{0}   -> moved to {1}').format(
                   time.strftime('%c', creation),
                   destination), 3)
-            if not os.path.isdir('Videos/' + destination):
-                # os.mkdir('Videos/' + destination)
-                pass
-            # os.rename('Videos/' + file, 'Videos/' + destination + '/' + file)
 
-            time.sleep(.04)
     bprint("Videos sorted by date!")
 
 
