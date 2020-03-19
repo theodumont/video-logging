@@ -11,14 +11,23 @@ from textwrap import fill
 
 
 DIRS = ['Audio', 'Videos', 'Images', 'Documents', 'Folders', 'Other']
-EXT_AUDIO = ['.wav', '.mp3', '.raw', '.wma']
-EXT_VIDEO = ['.mp4', '.m4a', '.m4v', '.f4v', '.f4a', '.f4b', '.m4b', '.m4r', '.avi', '.wmv', '.flv', '.MOV']
-EXT_IMAGE = ['.jpeg', '.jpg', '.png', '.svg', '.bmp', '.gif']
-EXT_DOCUMENT = ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf', '.xlsx', '.pptx']
-EXT_FOLDER = ['.rar', '.zip']
+
+EXTENSIONS = {
+    'Audio': ['.wav', '.mp3', '.raw', '.wma'],
+    'Videos': ['.mp4', '.m4a', '.m4v', '.f4v', '.f4a', '.f4b', '.m4b', '.m4r', '.avi', '.wmv', '.flv', '.MOV'],
+    'Images': ['.jpeg', '.jpg', '.png', '.svg', '.bmp', '.gif'],
+    'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf', '.xlsx', '.pptx'],
+    'Folders': ['', '.rar', '.zip'],
+    'Other': []
+}
 
 
-os.chdir('foo')
+def move_to_subdir(file, subdir, to_move):
+    if not os.path.isdir(subdir):
+        os.mkdir('./{}'.format(subdir))
+    if to_move:
+        os.rename(file, f'{subdir}/{file}')
+        bprint(" {1}          {0}{2}".format(file, subdir, "    (moved)"), 3)
 
 
 def folder_sort(folder):
@@ -26,41 +35,30 @@ def folder_sort(folder):
     Sorts the files into directories according to their extension.
     Creates the directories if they don't exist.
     """
-    # os.chdir(folder)
+    print("")
     bprint("Sorting files...\n")
-    moved = "   -> moved"
-    if not os.path.isdir('Audio'):
-        for d in DIRS:
-            os.mkdir('./{}'.format(d))
 
     bprint("  File type    File name\n", 3)
     bprint(" -------------------------", 3)
     for file in os.listdir():
+        time.sleep(.001)
         name, extension = os.path.splitext(file)
+        treated = False
+        for d in DIRS:
+            if extension in EXTENSIONS[d]:
+                if not d == 'Folders':
+                    move_to_subdir(file, d, True)
+                else:  # is a folder
+                    if name not in DIRS:
+                        move_to_subdir(file, d, True)
+                    else:
+                        move_to_subdir(file, d, False)
+                treated = True
+                break  # on ne regarde pas les autres dirs
+        if not treated:
+            move_to_subdir(file, d, True)
 
-        if extension in EXT_AUDIO:
-            bprint(" Audio          {0}{1}".format(file, moved), 3)
-            os.rename(file, 'Audio/' + file)
-        elif extension in EXT_VIDEO:
-            bprint(" Video          {0}{1}".format(file, moved), 3)
-            os.rename(file, 'Videos/' + file)
-        elif extension in EXT_IMAGE:
-            bprint(" Image          {0}{1}".format(file, moved), 3)
-            os.rename(file, 'Images/' + file)
-        elif extension in EXT_DOCUMENT:
-            bprint(" Document       {0}{1}".format(file, moved), 3)
-            os.rename(file, 'Documents/' + file)
-        else:
-            if os.path.isdir(name) or extension in EXT_FOLDER:
-                if name not in DIRS:
-                    bprint(" Folder         {0}{1}".format(file, moved), 3)
-                    os.rename(file, 'Folders/' + file)
-                else:
-                    bprint(" Script         {}".format(file), 3)
-            else:
-                bprint(" Other          {0}{1}".format(file, moved), 3)
-                os.rename(file, 'Other/' + file)
-        time.sleep(.04)
+    print("")
     bprint("Files sorted by type!")
 
 
@@ -69,9 +67,8 @@ def trash_videos(folder, time_limit):
     Trashes the videos that are shorter than .time_limit to get rid of
     all the shooting errors.
     """
-    # os.chdir(folder)
     if not os.path.isdir('Audio'):
-        folder_sort()
+        folder_sort(folder)
     bprint("Trashing files of duration <= {}s...\n".format(time_limit))
     bprint("  File name      Duration\n", 3)
     bprint(" -------------------------", 3)
@@ -84,8 +81,9 @@ def trash_videos(folder, time_limit):
             deleted = ""
             if duration < time_limit:
                 if not os.path.isdir('Videos/Trash'):
-                    os.mkdir('Videos/Trash')
-                os.rename('Videos/' + file, 'Videos/Trash/' + file)
+                    # os.mkdir('Videos/Trash')
+                    pass
+                # os.rename('Videos/' + file, 'Videos/Trash/' + file)
                 deleted = "   -> moved to '/Trash'"
             bprint(" {0}     {1:.1f} s{2}".format(file, duration, deleted), 3)
     bprint("Files trashed!")
@@ -95,7 +93,6 @@ def sort_videos(folder):
     """
     Sorts videos in directories by date to simplifiy the derushing process.
     """
-    # os.chdir(folder)
     bprint("Sorting videos by date...\n")
     if not os.path.isdir('Audio'):
         folder_sort(folder)
@@ -110,8 +107,9 @@ def sort_videos(folder):
                   time.strftime('%c', creation),
                   destination), 3)
             if not os.path.isdir('Videos/' + destination):
-                os.mkdir('Videos/' + destination)
-            os.rename('Videos/' + file, 'Videos/' + destination + '/' + file)
+                # os.mkdir('Videos/' + destination)
+                pass
+            # os.rename('Videos/' + file, 'Videos/' + destination + '/' + file)
 
             time.sleep(.04)
     bprint("Videos sorted by date!")
@@ -131,6 +129,9 @@ def bprint(msg, mode=0):
         return
     elif mode == 3:
         print(f"     {wrapped_msg}")
+        return
+    elif mode == 4:
+        print(f"(derush) {wrapped_msg}")
         return
     else:   # i.e. mode == 0
         print(f"---> {wrapped_msg}")
