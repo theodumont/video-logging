@@ -10,13 +10,14 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 from textwrap import fill
 
 
-DIRS = ['Audio', 'Videos', 'Images', 'Documents', 'Folders', 'Other']
+DIRS = ['Audio', 'Videos', 'Images', 'Documents', 'Python', 'Folders', 'Other']
 
 EXTENSIONS = {
     'Audio': ['.wav', '.mp3', '.raw', '.wma'],
     'Videos': ['.mp4', '.m4a', '.m4v', '.f4v', '.f4a', '.f4b', '.m4b', '.m4r', '.avi', '.wmv', '.flv', '.MOV'],
     'Images': ['.jpeg', '.jpg', '.png', '.svg', '.bmp', '.gif'],
-    'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf', '.xlsx', '.pptx'],
+    'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf', '.xlsx', '.pptx', '.tex'],
+    'Python': ['.py', '.pyc'],
     'Folders': ['', '.rar', '.zip'],
     'Other': []
 }
@@ -40,7 +41,6 @@ def folder_sort(folder):
         else:
             bprint(" {1}          {0}".format(file, 'Script'), 3)
 
-
     print("")
     bprint("Sorting files...\n")
 
@@ -55,7 +55,9 @@ def folder_sort(folder):
                 if not d == 'Folders':
                     move_to_subdir(file, d, True)
                 else:  # is a folder
-                    if name not in DIRS:
+                    if not os.path.isdir(file):  # is a file without extension
+                        move_to_subdir(file, 'Documents', True)
+                    elif name not in DIRS:
                         move_to_subdir(file, d, True)
                     else:
                         move_to_subdir(file, d, False)
@@ -131,6 +133,9 @@ def sort_by_date(folder):
 
 
 def bprint(msg, mode=0):
+    """
+    Prettily display the messages.
+    """
     # mode 0 means information, 1 means warning and 2 means error
     wrapped_msg_list = []
     for line in iter(msg.splitlines()):

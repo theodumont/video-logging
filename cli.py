@@ -14,20 +14,26 @@ except ImportError:
 
 
 class CLI(object):
-    """docstring for CLI."""
+    """CLI for the 'video_logging' module."""
 
     def __init__(self):
+        """
+        Class constructor.
+        """
         # List of all parameters accepted to trigger the different modes.
-        self.change_list = ["change", "cd"]
-        self.folder_list = ["folder"]
-        self.trash_list = ["trash"]
-        self.date_list = ["time", "date"]
-        self.help_list = ["help", "h", "?"]
+        self.change_list = ["cd", "change", "c", "go"]
+        self.folder_list = ["folder", "f", "folders"]
+        self.trash_list = ["trash", "t", "short"]
+        self.date_list = ["date", "d", "when"]
+        self.help_list = ["help", "h", "?", "what", "how"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
         # folder to clean
         self.folder = os.getcwd()
 
     def read_command(self, command):
+        """
+        Read from the users command.
+        """
         # cursor is used to keep track of how many argument we read from the users command.
         cursor = 0
         split_command = str.split(command)
@@ -60,14 +66,16 @@ class CLI(object):
             return
 
     def exit(self):
-        # Used to leave the tool.
+        """
+        Used to leave the tool.
+        """
         log.bprint("Leaving the tool...")
         sys.exit(0)
 
-    def process_ls(self):
-        os.system('dir')
-
     def process_change_dir(self, split_command, cursor):
+        """
+        When the 'cd' command is read.
+        """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
             log.bprint(f"What folder do you want to clean?", 1)
@@ -88,9 +96,15 @@ class CLI(object):
                 return
 
     def process_folder(self):
+        """
+        When the 'folder' command is read.
+        """
         log.folder_sort(self.folder)
 
     def process_trash(self, split_command, cursor):
+        """
+        When the 'trash' command is read.
+        """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
             log.bprint(f"What time limit do you want to impose?", 1)
@@ -110,9 +124,16 @@ class CLI(object):
                 return
 
     def process_date(self):
+        """
+        When the 'date' command is read.
+        """
         log.sort_by_date(self.folder)
 
     def process_help(self, split_command, cursor):
+        """
+        When the 'help' command is read.
+        """
+        print("")
         if len(split_command) == cursor:
             # i.e. no more arguments to read, just printing command list.
             command_help = (
@@ -122,7 +143,14 @@ class CLI(object):
             " - trash : \n"
             " - date : \n"
             " - help : Brings out various help message, including this one.\n"
-            " - exit : Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).\n"
+            " - exit : Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).\n\n"
+            "The usual way to use the tool is to type the following successive instructions:\n"
+            "'>> cd foo'\n"
+            "'>> folder'\n"
+            "'>> cd Videos'\n"
+            "'>> trash 3'\n"
+            "'>> date'\n"
+            "but you can do what you want!\n"
             )
             log.bprint(command_help)
             return
@@ -130,42 +158,47 @@ class CLI(object):
             topic = split_command[cursor]
             cursor += 1
             if topic in self.exit_list:
-                log.bprint("The exit command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).")
+                log.bprint("The 'exit' command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).")
                 return
             elif topic in self.change_list:
-                log.bprint("the change command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'")
+                log.bprint("The 'change' command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'")
                 return
             elif topic in self.folder_list:
-                log.bprint("folder help")
+                log.bprint("The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:\n'>> folder'\n\nThe repositories and the extensions they will contain are:")
+                for directory in log.EXTENSIONS:
+                    print(f"{directory}:".ljust(11, ' ') + str(log.EXTENSIONS[directory]))
+                print("If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.")
                 return
             elif topic in self.trash_list:
-                log.bprint("trash help")
+                log.bprint("The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,\n'>> trash <time_limit>'\nwhere time_limit is the video length threshold.")
                 return
             elif topic in self.date_list:
-                log.bprint("date help")
+                log.bprint("The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:\n'>> date'\nThe repositories will be in the form of 'YYMMDD-Day'.\n")
                 return
             elif topic in self.help_list:
                 log.bprint("Why are you here?")
                 return
 
-
-def display(cli):
-    header = (
-    "\n"
-    "##############################################################################\n"
-    "  This tool was designed by Théo Dumont and all the source code is available  \n"
-    "   at https://github.com/theodumont/video-logging under the GPL 3 License.    \n"
-    "##############################################################################\n"
-             )
-    os.system('cls')
-    print(header)
+    def display(self):
+        """
+        Display a banner.
+        """
+        header = (
+        "\n"
+        "##############################################################################\n"
+        "  This tool was designed by Théo Dumont and all the source code is available  \n"
+        "   at https://github.com/theodumont/video-logging under the GPL 3 License.    \n"
+        "##############################################################################\n"
+                 )
+        os.system('cls')
+        print(header)
 
 
 if __name__ == '__main__':
     os.system('cls')
     cli = CLI()
 
-    display(cli)
+    cli.display()
 
     while True:
         try:
@@ -173,7 +206,7 @@ if __name__ == '__main__':
             log.bprint(cli.folder, 4)
             command = input(">> ")
             cli.read_command(command)
-        except EOFError:
+        except (EOFError, KeyboardInterrupt):
             print("exit")  # In order to avoid ugly output
             cli.exit()
             break

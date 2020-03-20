@@ -34,3 +34,6 @@ To sort files by date, type:
 ```bash
 >> date
 ```
+
+### 2.4. Make renaming easier
+To do
