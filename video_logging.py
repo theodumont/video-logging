@@ -5,22 +5,25 @@ Cleans a folder to simplify the video logging process.
 
 import os
 import time
-import argparse
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from textwrap import fill
 
 
-DIRS = ['Audio', 'Videos', 'Images', 'Documents', 'Python', 'Folders', 'Other']
-
 EXTENSIONS = {
-    'Audio': ['.wav', '.mp3', '.raw', '.wma'],
+    'Audio': ['.wav', '.mp3', '.raw', '.wma', '.aif', '.cda', '.mid', '.midi', '.mpa', '.ogg', '.wpl'],
     'Videos': ['.mp4', '.m4a', '.m4v', '.f4v', '.f4a', '.f4b', '.m4b', '.m4r', '.avi', '.wmv', '.flv', '.MOV'],
-    'Images': ['.jpeg', '.jpg', '.png', '.svg', '.bmp', '.gif'],
-    'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf', '.xlsx', '.pptx', '.tex'],
+    'Images': ['.ai', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.ps', '.svg', '.tif', '.tiff'],
+    'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf', '.xlsx', '.pptx', '.tex', '.key', '.odp', '.pps', '.ppt', '.pptx', '.ods'],
+    'Folders': ['', '.rar', '.zip', '7z', '.pkg', '.z', '.tar.gz'],
     'Python': ['.py', '.pyc'],
-    'Folders': ['', '.rar', '.zip'],
+    'Internet': ['.css', '.htm', '.html', '.js', '.php', '.xhtml'],
+    'Data': ['.csv', '.dat', '.db', '.dbf', '.log', '.mdb', '.sav', '.sql', '.tar', '.xml'],
+    'Fonts': ['.fnt', '.fon', '.otf', '.ttf'],
     'Other': []
 }
+
+# DIRS = ['Audio', 'Videos', 'Images', 'Documents', 'Python', 'Folders', 'Other']
+# DIRS = [directory for directory in EXTENSIONS]
 
 
 def folder_sort(folder):
@@ -36,28 +39,28 @@ def folder_sort(folder):
         if not os.path.isdir(subdir):
             os.mkdir('./{}'.format(subdir))
         if to_move:
-            os.rename(file, f'{subdir}/{file}')
-            bprint(" {1}          {0}{2}".format(file, subdir, "    (moved)"), 3)
+            os.rename(file, f"{subdir}/{file}")
+            cprint(subdir, file, "(moved)")
         else:
-            bprint(" {1}          {0}".format(file, 'Script'), 3)
+            cprint('Script', file)
 
     print("")
     bprint("Sorting files...\n")
 
-    bprint("  File type    File name\n", 3)
-    bprint(" -------------------------", 3)
+    cprint("File type", "File name")
+    bprint(" " + 27 * "-", 3)
     for file in os.listdir():
         time.sleep(.001)
         name, extension = os.path.splitext(file)
         treated = False
-        for d in DIRS:
+        for d in EXTENSIONS:
             if extension in EXTENSIONS[d]:
                 if not d == 'Folders':
                     move_to_subdir(file, d, True)
                 else:  # is a folder
                     if not os.path.isdir(file):  # is a file without extension
                         move_to_subdir(file, 'Documents', True)
-                    elif name not in DIRS:
+                    elif name not in EXTENSIONS:
                         move_to_subdir(file, d, True)
                     else:
                         move_to_subdir(file, d, False)
@@ -84,15 +87,15 @@ def trash_videos(folder, time_limit):
             if not os.path.isdir('Trash'):
                 os.mkdir('./Trash')
             os.rename(file, f'Trash/{file}')
-            bprint(" {0}     {1:.1f} s    (trashed)".format(file, duration), 3)
+            cprint(file, duration, "(trashed)", is_long=True)
         else:
-            bprint(" {0}     {1:.1f} s".format(file, duration), 3)
+            cprint(file, duration, is_long=True)
 
     print("")
     bprint("Trashing files of duration <= {}s...\n".format(time_limit))
 
-    bprint("  File name      Duration\n", 3)
-    bprint(" -------------------------", 3)
+    cprint("File name", "Duration", is_long=True)
+    bprint(" " + 32 * "-", 3)
     for file in os.listdir():
         name, extension = os.path.splitext(file)
         if extension in EXTENSIONS['Videos']:
@@ -116,7 +119,8 @@ def sort_by_date(folder):
     bprint("Sorting files by date...\n")
 
     sep = ' ' + 50*'-'
-    bprint("File name".center(25) + "      Created on\n"+sep, 3)
+    cprint("File name", "Created on", is_long=True)
+    bprint(" " + 50 * "-", 3)
     for file in os.listdir():
         if not os.path.isdir(file):
             time.sleep(.001)
@@ -125,9 +129,7 @@ def sort_by_date(folder):
             if not os.path.isdir(destination):
                 os.mkdir(destination)
             os.rename(file, destination + '/' + file)
-            bprint((file.center(25) + '{0}   -> moved to {1}').format(
-                  time.strftime('%c', creation),
-                  destination), 3)
+            cprint(file, time.strftime('%c', creation), "-> moved to " + destination, True)
 
     bprint("Videos sorted by date!")
 
@@ -156,3 +158,12 @@ def bprint(msg, mode=0):
     else:   # i.e. mode == 0
         print(f"---> {wrapped_msg}")
         return
+
+
+def cprint(col1, col2="", col3="", is_long=False):
+    if is_long:
+        str1 = f"  {col1}".ljust(25)
+    else:
+        str1 = f"  {col1}".ljust(17)
+    str2 = f"{col2}".ljust(25)
+    bprint(str1 + str2 + col3, 3)
