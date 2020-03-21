@@ -25,6 +25,7 @@ class CLI(object):
         self.folder_list = ["folder", "f", "folders"]
         self.trash_list = ["trash", "t", "short"]
         self.date_list = ["date", "d", "when"]
+        self.rename_list = ["rename", "name", "r"]
         self.help_list = ["help", "h", "?", "what", "how"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
         # folder to clean
@@ -56,6 +57,9 @@ class CLI(object):
         elif instruction.lower() in self.date_list:
             return self.process_date()
 
+        elif instruction.lower() in self.rename_list:
+            return self.process_rename(split_command, cursor)
+
         elif instruction.lower() in self.help_list:
             return self.process_help(split_command, cursor)
 
@@ -84,13 +88,9 @@ class CLI(object):
             directory = split_command[cursor]
             cursor += 1
             try:
-                str_directory = str(directory)
-                os.chdir(str_directory)
+                os.chdir(directory)
                 self.folder = os.getcwd()
                 # display(self)
-            except ValueError as e:
-                log.bprint(f"The tool could not parse {directory} as a string. The correct syntax to change the directory is :\n'>> cd <directory>'", 2)
-                return
             except FileNotFoundError as e:
                 log.bprint(f"The tool could not find the {directory} directory. The correct syntax to change the directory is :\n'>> cd <directory>'", 2)
                 return
@@ -120,7 +120,7 @@ class CLI(object):
                 else:
                     log.trash_videos(self.folder, int_time_limit)
             except ValueError as e:
-                log.bprint(f"The value of the time_limit has to be a positive int, but the tool could not parse {time_limit} as an int. The correct syntax to choose the time limit is :\n'>> trash <time limit>'", 2)
+                log.bprint(f"The value of the time_limit has to be a positive int, but the tool could not parse {time_limit} as an int. The correct syntax to choose the time limit is :\n'>> trash <time_limit>'", 2)
                 return
 
     def process_date(self):
@@ -128,6 +128,24 @@ class CLI(object):
         When the 'date' command is read.
         """
         log.sort_by_date(self.folder)
+
+    def process_rename(self, split_command, cursor):
+        """
+        When the 'rename' command is read.
+        """
+        if len(split_command) == cursor:
+            # i.e. we have no more arguments available
+            log.bprint(f"What files do you want to rename?", 1)
+            log.bprint(f"The syntax to rename all files of a specific type is:\n'>> rename <file type>'\nfile type can take the values:\nvideos, \n")
+        else:
+            file_type = split_command[cursor]
+            cursor += 1
+            try:
+                assert file_type in ['videos']
+                log.file_rename(self.folder, file_type.capitalize(), self.exit_list)
+            except AssertionError as e:
+                log.bprint(f"The tool is not able to rename the '{file_type}' files. The correct syntax to rename all files of a specific type is:\n'>> rename <file_type>'\nwhere file_type can take the values:\nvideos, \n", 2)
+                return
 
     def process_help(self, split_command, cursor):
         """
@@ -139,9 +157,10 @@ class CLI(object):
             command_help = (
             "All possible input commands are :\n\n"
             " - change : Changes the current directory. For more information about change, please use 'help change'.\n"
-            " - folder : Sorts the current directory files in folders. For more information folder, please use 'help folder'.\n"
-            " - trash : \n"
-            " - date : \n"
+            " - folder : Sorts the current directory files in folders. For more information about folder, please use 'help folder'.\n"
+            " - trash : Trashes the useless videos. For more information about trash, please use 'help trash'.\n"
+            " - date : Sorts the current directory files in folders by date. For more information about date, pleasse use 'help date'.\n"
+            " - rename : Opens and renames the current directory files. For more information about rename, please use 'help rename'.\n"
             " - help : Brings out various help message, including this one.\n"
             " - exit : Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).\n\n"
             "The usual way to use the tool is to type the following successive instructions:\n"
@@ -149,6 +168,7 @@ class CLI(object):
             "'>> folder'\n"
             "'>> cd Videos'\n"
             "'>> trash 3'\n"
+            "'>> rename videos'\n"
             "'>> date'\n"
             "but you can do what you want!\n"
             )
@@ -174,6 +194,9 @@ class CLI(object):
                 return
             elif topic in self.date_list:
                 log.bprint("The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:\n'>> date'\nThe repositories will be in the form of 'YYMMDD-Day'.\n")
+                return
+            elif topic in self.rename_list:
+                log.bprint("The 'rename' command opens the files one by one and lets you rename them. The syntax to rename all files of a specific type is:\n'>> rename <file_type>'\nwhere file_type can take the values:\nvideos, \n")
                 return
             elif topic in self.help_list:
                 log.bprint("Why are you here?")

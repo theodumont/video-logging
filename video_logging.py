@@ -6,6 +6,7 @@ Cleans a folder to simplify the video logging process.
 import os
 import time
 from moviepy.video.io.VideoFileClip import VideoFileClip
+import subprocess
 from textwrap import fill
 
 
@@ -22,8 +23,7 @@ EXTENSIONS = {
     'Other': []
 }
 
-# DIRS = ['Audio', 'Videos', 'Images', 'Documents', 'Python', 'Folders', 'Other']
-# DIRS = [directory for directory in EXTENSIONS]
+PATH_TO_VLC = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe"
 
 
 def folder_sort(folder):
@@ -99,10 +99,9 @@ def trash_videos(folder, time_limit):
     for file in os.listdir():
         name, extension = os.path.splitext(file)
         if extension in EXTENSIONS['Videos']:
-            clip = VideoFileClip(file)
-            time.sleep(.001)
-            duration = clip.duration
-            clip.close()
+            with VideoFileClip(file) as clip:
+                time.sleep(.001)
+                duration = clip.duration
             to_trash = ""
             move_to_trash(file, duration)
 
@@ -118,7 +117,6 @@ def sort_by_date(folder):
     print("")
     bprint("Sorting files by date...\n")
 
-    sep = ' ' + 50*'-'
     cprint("File name", "Created on", is_long=True)
     bprint(" " + 50 * "-", 3)
     for file in os.listdir():
@@ -132,6 +130,50 @@ def sort_by_date(folder):
             cprint(file, time.strftime('%c', creation), "-> moved to " + destination, True)
 
     bprint("Videos sorted by date!")
+
+
+def file_rename(folder, directory, exit_list):
+    """
+    Rename the files.
+    """
+
+    def open_and_rename(file, extension, directory):
+        """
+        Open and rename a file.
+        """
+        cprint(directory, file)
+        # open video
+        subprocess.Popen([PATH_TO_VLC, file], stdout=subprocess.PIPE)
+        # rename video
+        new_name = input('    >> new name: ')
+        if new_name!="":
+            os.rename(file, new_name + extension)
+
+
+    print("")
+    bprint("Renaming the {}...\n".format(directory.lower()))
+
+    cprint("File type", "Original name")
+    bprint(" " + 34 * "-", 3)
+    for file in os.listdir():
+        name, extension = os.path.splitext(file)
+        if not os.path.isdir(file) and extension in EXTENSIONS[directory]:
+            time.sleep(.001)
+            cprint(directory, file)
+            # open video
+            subprocess.Popen([PATH_TO_VLC, file], stdout=subprocess.PIPE)
+            # rename video
+            try:
+                new_name = input('       >> new name: ')
+                if new_name in exit_list:
+                    break
+                elif new_name != "":
+                    os.rename(file, new_name + extension)
+            except (EOFError, KeyboardInterrupt):
+                print("exit")  # In order to avoid ugly output
+                break
+            finally:
+                bprint("{} renamed!".format(directory))
 
 
 def bprint(msg, mode=0):
