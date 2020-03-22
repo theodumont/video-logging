@@ -5,11 +5,11 @@ Python script that can be used to quickly organize rushes from a video shooting 
 ## Table of contents
 
 1. [ Installation ](#1-installation)  
-2. [ Features ](#2-features)
-    2.1. [ Sort by extension ](#21-sort-by-extension)
-    2.2. [ Trash useless videos ](#22-trash-useless-videos)
-    2.3. [ Sort by date ](#23-sort-by-date)
-    2.4. [ Rename files ](#24-rename-files)
+2. [ Features ](#2-features)  
+    2.1. [ Sort by extension ](#21-sort-by-extension)  
+    2.2. [ Trash useless videos ](#22-trash-useless-videos)  
+    2.3. [ Sort by date ](#23-sort-by-date)  
+    2.4. [ Rename files ](#24-rename-files)  
 
 ## 1. Installation
 

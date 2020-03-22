@@ -92,7 +92,7 @@ def trash_videos(folder, time_limit):
             cprint(file, duration, is_long=True)
 
     print("")
-    bprint("Trashing files of duration <= {}s...\n".format(time_limit))
+    bprint("Trashing videos of duration <= {}s...\n".format(time_limit))
 
     cprint("File name", "Duration", is_long=True)
     bprint(" " + 32 * "-", 3)
@@ -146,9 +146,8 @@ def file_rename(folder, directory, exit_list):
         subprocess.Popen([PATH_TO_VLC, file], stdout=subprocess.PIPE)
         # rename video
         new_name = input('    >> new name: ')
-        if new_name!="":
+        if new_name != "":
             os.rename(file, new_name + extension)
-
 
     print("")
     bprint("Renaming the {}...\n".format(directory.lower()))
@@ -170,10 +169,9 @@ def file_rename(folder, directory, exit_list):
                 elif new_name != "":
                     os.rename(file, new_name + extension)
             except (EOFError, KeyboardInterrupt):
-                print("exit")  # In order to avoid ugly output
+                print("ctrl + c")  # In order to avoid ugly output
                 break
-            finally:
-                bprint("{} renamed!".format(directory))
+    bprint("Videos renamed!")
 
 
 def bprint(msg, mode=0):
