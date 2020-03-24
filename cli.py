@@ -46,28 +46,27 @@ class CLI(object):
         cursor += 1
 
         if instruction.lower() in self.change_list:
-            return self.process_change_dir(split_command, cursor)
+            self.process_change_dir(split_command, cursor)
 
         elif instruction.lower() in self.folder_list:
-            return self.process_folder()
+            self.process_folder()
 
         elif instruction.lower() in self.trash_list:
-            return self.process_trash(split_command, cursor)
+            self.process_trash(split_command, cursor)
 
         elif instruction.lower() in self.date_list:
-            return self.process_date()
+            self.process_date()
 
         elif instruction.lower() in self.rename_list:
-            return self.process_rename(split_command, cursor)
+            self.process_rename(split_command, cursor)
 
         elif instruction.lower() in self.help_list:
-            return self.process_help(split_command, cursor)
+            self.process_help(split_command, cursor)
 
         elif instruction.lower() in self.exit_list:
-            return self.exit()
+            self.exit()
         else:
             log.bprint(f"The input command {command} could not be parsed, because the tool did not understand the term '{instruction}'. If you wish to you can use :\n'>> help'\nThat instruction will bring a list of the available instruction and their use cases.", 2)
-            return
 
     def exit(self):
         """
@@ -93,13 +92,12 @@ class CLI(object):
                 # display(self)
             except FileNotFoundError as e:
                 log.bprint(f"The tool could not find the {directory} directory. The correct syntax to change the directory is :\n'>> cd <directory>'", 2)
-                return
 
     def process_folder(self):
         """
         When the 'folder' command is read.
         """
-        log.folder_sort(self.folder)
+        log.folder_sort()
 
     def process_trash(self, split_command, cursor):
         """
@@ -116,18 +114,16 @@ class CLI(object):
                 int_time_limit = int(time_limit)
                 if int_time_limit <= 0:
                     log.bprint(f"You asked the tool to take {time_limit} as a time limit, but negative (zero included) values are not valid in that context. Please input a positive integer.", 2)
-                    return
                 else:
-                    log.trash_videos(self.folder, int_time_limit)
+                    log.trash_videos(int_time_limit)
             except ValueError as e:
                 log.bprint(f"The value of the time_limit has to be a positive int, but the tool could not parse {time_limit} as an int. The correct syntax to choose the time limit is :\n'>> trash <time_limit>'", 2)
-                return
 
     def process_date(self):
         """
         When the 'date' command is read.
         """
-        log.sort_by_date(self.folder)
+        log.sort_by_date()
 
     def process_rename(self, split_command, cursor):
         """
@@ -142,10 +138,9 @@ class CLI(object):
             cursor += 1
             try:
                 assert file_type in ['videos']
-                log.file_rename(self.folder, file_type.capitalize(), self.exit_list)
+                log.file_rename(file_type.capitalize(), self.exit_list)
             except AssertionError as e:
                 log.bprint(f"The tool is not able to rename the '{file_type}' files. The correct syntax to rename all files of a specific type is:\n'>> rename <file_type>'\nwhere file_type can take the values:\nvideos, \n", 2)
-                return
 
     def process_help(self, split_command, cursor):
         """
@@ -173,34 +168,26 @@ class CLI(object):
             "but you can do what you want!\n"
             )
             log.bprint(command_help)
-            return
         else:
             topic = split_command[cursor]
             cursor += 1
             if topic in self.exit_list:
                 log.bprint("The 'exit' command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).")
-                return
             elif topic in self.change_list:
                 log.bprint("The 'change' command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'")
-                return
             elif topic in self.folder_list:
                 log.bprint("The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:\n'>> folder'\n\nThe repositories and the extensions they will contain are:")
                 for directory in log.EXTENSIONS:
                     print(f"{directory}:".ljust(11, ' ') + str(log.EXTENSIONS[directory]))
                 print("If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.")
-                return
             elif topic in self.trash_list:
                 log.bprint("The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,\n'>> trash <time_limit>'\nwhere time_limit is the video length threshold.")
-                return
             elif topic in self.date_list:
                 log.bprint("The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:\n'>> date'\nThe repositories will be in the form of 'YYMMDD-Day'.\n")
-                return
             elif topic in self.rename_list:
                 log.bprint("The 'rename' command opens the files one by one and lets you rename them. The syntax to rename all files of a specific type is:\n'>> rename <file_type>'\nwhere file_type can take the values:\nvideos, \n")
-                return
             elif topic in self.help_list:
                 log.bprint("Why are you here?")
-                return
 
     def display(self):
         """

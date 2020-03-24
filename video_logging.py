@@ -5,29 +5,34 @@ Cleans a folder to simplify the video logging process.
 
 import os
 import time
-from moviepy.video.io.VideoFileClip import VideoFileClip
 import subprocess
 from textwrap import fill
+from moviepy.video.io.VideoFileClip import VideoFileClip
 
 
 EXTENSIONS = {
-    'Audio': ['.wav', '.mp3', '.raw', '.wma', '.aif', '.cda', '.mid', '.midi', '.mpa', '.ogg', '.wpl'],
-    'Videos': ['.mp4', '.m4a', '.m4v', '.f4v', '.f4a', '.f4b', '.m4b', '.m4r', '.avi', '.wmv', '.flv', '.MOV'],
-    'Images': ['.ai', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.ps', '.svg', '.tif', '.tiff'],
-    'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md', '.rtf', '.xlsx', '.pptx', '.tex', '.key', '.odp', '.pps', '.ppt', '.pptx', '.ods'],
+    'Audio': ['.wav', '.mp3', '.raw', '.wma', '.aif', '.cda', '.mid', '.midi',
+              '.mpa', '.ogg', '.wpl'],
+    'Videos': ['.mp4', '.m4a', '.m4v', '.f4v', '.f4a', '.f4b', '.m4b', '.m4r',
+               '.avi', '.wmv', '.flv', '.MOV'],
+    'Images': ['.ai', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.ps',
+               '.svg', '.tif', '.tiff'],
+    'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md',
+                  '.rtf', '.xlsx', '.pptx', '.tex', '.key', '.odp', '.pps',
+                  '.ppt', '.pptx', '.ods'],
     'Folders': ['', '.rar', '.zip', '7z', '.pkg', '.z', '.tar.gz'],
     'Python': ['.py', '.pyc'],
     'Internet': ['.css', '.htm', '.html', '.js', '.php', '.xhtml'],
-    'Data': ['.csv', '.dat', '.db', '.dbf', '.log', '.mdb', '.sav', '.sql', '.tar', '.xml'],
+    'Data': ['.csv', '.dat', '.db', '.dbf', '.log', '.mdb', '.sav', '.sql',
+             '.tar', '.xml'],
     'Fonts': ['.fnt', '.fon', '.otf', '.ttf'],
     'Other': []
 }
 
 PATH_TO_VLC = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe"
-# PATH_TO_VLC = os.path.join("C:", "Program Files", "VideoLAN", "VLC", "vlc.exe")
 
 
-def folder_sort(folder):
+def folder_sort():
     """
     Sorts the files into directories according to their extension.
     Creates the directories if they don't exist.
@@ -54,27 +59,27 @@ def folder_sort(folder):
         time.sleep(.001)
         name, extension = os.path.splitext(file)
         treated = False
-        for d in EXTENSIONS:
-            if extension in EXTENSIONS[d]:
-                if not d == 'Folders':
-                    move_to_subdir(file, d, True)
+        for directory in EXTENSIONS:
+            if extension in EXTENSIONS[directory]:
+                if not directory == 'Folders':
+                    move_to_subdir(file, directory, True)
                 else:  # is a folder
                     if not os.path.isdir(file):  # is a file without extension
                         move_to_subdir(file, 'Documents', True)
                     elif name not in EXTENSIONS:
-                        move_to_subdir(file, d, True)
+                        move_to_subdir(file, directory, True)
                     else:
-                        move_to_subdir(file, d, False)
+                        move_to_subdir(file, directory, False)
                 treated = True
                 break  # don't look at the remaining dirs
         if not treated:
-            move_to_subdir(file, d, True)
+            move_to_subdir(file, directory, True)
 
     print("")
     bprint("Files sorted by type!")
 
 
-def trash_videos(folder, time_limit):
+def trash_videos(time_limit):
     """
     Trashes the videos that are shorter than time_limit to get rid of
     all the shooting errors.
@@ -98,7 +103,7 @@ def trash_videos(folder, time_limit):
     cprint("File name", "Duration", is_long=True)
     bprint(" " + 32 * "-", 3)
     for file in os.listdir():
-        name, extension = os.path.splitext(file)
+        extension = os.path.splitext(file)[1]
         if extension in EXTENSIONS['Videos']:
             with VideoFileClip(file) as clip:
                 time.sleep(.001)
@@ -110,7 +115,7 @@ def trash_videos(folder, time_limit):
     bprint("Files trashed!")
 
 
-def sort_by_date(folder):
+def sort_by_date():
     """
     Sorts files in directories by date.
     """
@@ -133,7 +138,7 @@ def sort_by_date(folder):
     bprint("Videos sorted by date!")
 
 
-def file_rename(folder, directory, exit_list):
+def file_rename(directory, exit_list):
     """
     Rename the files.
     """
@@ -156,7 +161,7 @@ def file_rename(folder, directory, exit_list):
     cprint("File type", "Original name")
     bprint(" " + 34 * "-", 3)
     for file in os.listdir():
-        name, extension = os.path.splitext(file)
+        extension = os.path.splitext(file)[1]
         if not os.path.isdir(file) and extension in EXTENSIONS[directory]:
             time.sleep(.001)
             cprint(directory, file)
@@ -186,22 +191,20 @@ def bprint(msg, mode=0):
     wrapped_msg = "\n".join(wrapped_msg_list)
     if mode == 1:
         print(f"---! {wrapped_msg}")
-        return
     elif mode == 2:
         print(f"---X {wrapped_msg}")
-        return
     elif mode == 3:
         print(f"     {wrapped_msg}")
-        return
     elif mode == 4:
         print(f"(log)  {wrapped_msg}")
-        return
     else:   # i.e. mode == 0
         print(f"---> {wrapped_msg}")
-        return
 
 
 def cprint(col1, col2="", col3="", is_long=False):
+    """
+    Prettily display columns using bprint.
+    """
     if is_long:
         str1 = f"  {col1}".ljust(25)
     else:
