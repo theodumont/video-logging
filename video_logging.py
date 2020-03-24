@@ -24,6 +24,7 @@ EXTENSIONS = {
 }
 
 PATH_TO_VLC = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe"
+# PATH_TO_VLC = os.path.join("C:", "Program Files", "VideoLAN", "VLC", "vlc.exe")
 
 
 def folder_sort(folder):
@@ -39,7 +40,7 @@ def folder_sort(folder):
         if not os.path.isdir(subdir):
             os.mkdir('./{}'.format(subdir))
         if to_move:
-            os.rename(file, f"{subdir}/{file}")
+            os.rename(file, os.path.join(subdir, file))
             cprint(subdir, file, "(moved)")
         else:
             cprint('Script', file)
@@ -86,7 +87,7 @@ def trash_videos(folder, time_limit):
         if duration < time_limit:
             if not os.path.isdir('Trash'):
                 os.mkdir('./Trash')
-            os.rename(file, f'Trash/{file}')
+            os.rename(file, os.path.join('Trash', file))
             cprint(file, duration, "(trashed)", is_long=True)
         else:
             cprint(file, duration, is_long=True)
@@ -126,7 +127,7 @@ def sort_by_date(folder):
             destination = time.strftime('%y%m%d-%a', creation)
             if not os.path.isdir(destination):
                 os.mkdir(destination)
-            os.rename(file, destination + '/' + file)
+            os.rename(file, os.path.join(destination, file))
             cprint(file, time.strftime('%c', creation), "-> moved to " + destination, True)
 
     bprint("Videos sorted by date!")
