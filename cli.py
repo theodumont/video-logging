@@ -138,9 +138,15 @@ class CLI(object):
             cursor += 1
             try:
                 assert file_type in ['videos']
-                log.file_rename(file_type.capitalize(), self.exit_list)
+                log.file_rename(file_type.capitalize(), self.exit_list, self.trash_list)
             except AssertionError as e:
                 log.bprint(f"The tool is not able to rename the '{file_type}' files. The correct syntax to rename all files of a specific type is:\n'>> rename <file_type>'\nwhere file_type can take the values:\nvideos, \n", 2)
+
+    def process_unsort(self):
+        """
+        When the 'unsort' command is read.
+        """
+        log.unsort()
 
     def process_help(self, split_command, cursor):
         """
