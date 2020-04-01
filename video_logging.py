@@ -20,13 +20,13 @@ EXTENSIONS = {
     'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md',
                   '.rtf', '.xlsx', '.pptx', '.tex', '.key', '.odp', '.pps',
                   '.ppt', '.pptx', '.ods'],
-    'Folders': ['', '.rar', '.zip', '7z', '.pkg', '.z', '.tar.gz'],
+    'Folders': ['.rar', '.zip', '7z', '.pkg', '.z', '.tar.gz'],
     'Python': ['.py', '.pyc'],
     'Internet': ['.css', '.htm', '.html', '.js', '.php', '.xhtml'],
     'Data': ['.csv', '.dat', '.db', '.dbf', '.log', '.mdb', '.sav', '.sql',
              '.tar', '.xml'],
     'Fonts': ['.fnt', '.fon', '.otf', '.ttf'],
-    'Other': []
+    'Other': ['']
 }
 
 PATH_TO_VLC = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe"
@@ -34,21 +34,9 @@ PATH_TO_VLC = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe"
 
 def folder_sort():
     """
-    Sorts the files into directories according to their extension.
-    Creates the directories if they don't exist.
+    Sort the files into directories according to their extension.
+    Create the directories if they don't exist.
     """
-
-    def move_to_subdir(file, subdir, to_move):
-        """
-        Moves file to subdir if necessary.
-        """
-        if not os.path.isdir(subdir):
-            os.mkdir('./{}'.format(subdir))
-        if to_move:
-            os.rename(file, os.path.join(subdir, file))
-            cprint(subdir, file, "(moved)")
-        else:
-            cprint('Script', file)
 
     print("")
     bprint("Sorting files...\n")
@@ -58,20 +46,20 @@ def folder_sort():
     for file in os.listdir():
         time.sleep(.001)
         name, extension = os.path.splitext(file)
-        for directory in EXTENSIONS:
-            if extension in EXTENSIONS[directory]:
-                if not directory == 'Folders':
-                    move_to_subdir(file, directory, True)
-                else:  # is a folder
-                    if not os.path.isdir(file):  # is a file without extension
-                        move_to_subdir(file, 'Documents', True)
-                    elif name not in EXTENSIONS:
-                        move_to_subdir(file, directory, True)
-                    else:
-                        move_to_subdir(file, directory, False)
-                break  # don't look at the remaining dirs
+        if os.path.isdir(file):
+            if name not in EXTENSIONS:
+                move_to_dir(file, 'Folders')
+            else:
+                print("script")
         else:
-            move_to_subdir(file, directory, True)
+            treated = False
+            for directory in EXTENSIONS:
+                if extension in EXTENSIONS[directory]:
+                    move_to_dir(file, directory)
+                    treated = True
+                    break
+            if not treated:
+                move_to_dir(file, 'Other')
 
     print("")
     bprint("Files sorted by type!")
@@ -79,13 +67,13 @@ def folder_sort():
 
 def trash_videos(time_limit):
     """
-    Trashes the videos that are shorter than time_limit to get rid of
+    Trash the videos that are shorter than time_limit to get rid of
     all the shooting errors.
     """
 
     def move_to_trash(file, duration):
         """
-        Moves a video to Trash if it is too short.
+        Move a video to Trash if it is too short.
         """
         if duration < time_limit:
             if not os.path.isdir('Trash'):
@@ -115,7 +103,7 @@ def trash_videos(time_limit):
 
 def sort_by_date():
     """
-    Sorts files in directories by date.
+    Sort files in directories by date.
     """
 
     print("")
@@ -152,7 +140,7 @@ def file_rename(directory, exit_list, trash_list):
         try:
             new_name = input('       >> new name: ')
             if new_name in exit_list:
-                break
+                return
             elif new_name in trash_list:
                 if not os.path.isdir('Trash'):
                     os.mkdir('./Trash')
@@ -161,7 +149,7 @@ def file_rename(directory, exit_list, trash_list):
                 os.rename(file, new_name + extension)
         except (EOFError, KeyboardInterrupt):
             print("ctrl + c")  # In order to avoid ugly output
-            break
+            return
 
     print("")
     bprint("Renaming the {}...\n".format(directory.lower()))
@@ -175,6 +163,16 @@ def file_rename(directory, exit_list, trash_list):
             open_and_rename(file, extension, directory)
 
     bprint("Videos renamed!")
+
+
+
+def move_to_dir(file, directory):
+    """
+    Move file to directory
+    """
+    if not os.path.isdir(directory):
+        os.mkdir('./{}'.format(directory))
+    os.rename(file, os.path.join(directory, file))
 
 
 def bprint(msg, mode=0):
