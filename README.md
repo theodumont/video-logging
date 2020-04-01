@@ -2,6 +2,8 @@
 
 Python script that can be used to quickly organize rushes from a video shooting session.
 
+> :warning: Work in progress!
+
 ## Table of contents
 
 1. [ Installation ](#1-installation)  
@@ -10,14 +12,15 @@ Python script that can be used to quickly organize rushes from a video shooting 
     2.2. [ Trash useless videos ](#22-trash-useless-videos)  
     2.3. [ Sort by date ](#23-sort-by-date)  
     2.4. [ Rename files ](#24-rename-files)  
+3. [ Tests ](#3-tests)
 
 ## 1. Installation
 
 To use this tool, type in a shell:
 ```bash
-cd location_of_cli
-pip install -r requirements
-python cli.py
+>> cd location_of_cli
+>> pip install -r requirements
+>> python cli.py
 ```
 
 Don't hesitate to use the `help` command to understand the different functions of the tool.
@@ -50,3 +53,11 @@ To rename the files of type `file_type`, type:
 >> rename <file_type>
 ```
 where `file_type` can take the values `videos`.
+
+
+## 3. Tests
+I implemented the tests with the Python module `pytest` that can be installed through `pip`. To run the tests, run:
+```bash
+>> cd video_logging
+>> py.test -s
+```
