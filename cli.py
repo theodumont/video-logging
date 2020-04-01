@@ -7,7 +7,7 @@ import os
 import sys
 import argparse
 try:
-    import video_logging as log
+    import src.video_logging as log
 except ImportError:
     print("---X This command line tool is an interface to a python module called video_logging. In order to use this tool you must first make sure that this module is available (it currently isn't). The recommended way to do this is to grab the source code video_logging.py and put it in the same directory as this cli.py file. The source code for video_logging is available freely on GitHub at https://github.com/theodumont/video_logging-python.")
     sys.exit(1)

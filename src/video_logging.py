@@ -5,31 +5,10 @@ Cleans a folder to simplify the video logging process.
 
 import os
 import time
+import json
 import subprocess
 from textwrap import fill
 from moviepy.video.io.VideoFileClip import VideoFileClip
-
-
-EXTENSIONS = {
-    'Audio': ['.wav', '.mp3', '.raw', '.wma', '.aif', '.cda', '.mid', '.midi',
-              '.mpa', '.ogg', '.wpl'],
-    'Videos': ['.mp4', '.m4a', '.m4v', '.f4v', '.f4a', '.f4b', '.m4b', '.m4r',
-               '.avi', '.wmv', '.flv', '.MOV'],
-    'Images': ['.ai', '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.png', '.ps',
-               '.svg', '.tif', '.tiff'],
-    'Documents': ['.txt', '.pdf', '.doc', '.docx', '.odt', '.html', '.md',
-                  '.rtf', '.xlsx', '.pptx', '.tex', '.key', '.odp', '.pps',
-                  '.ppt', '.pptx', '.ods'],
-    'Folders': ['.rar', '.zip', '7z', '.pkg', '.z', '.tar.gz'],
-    'Python': ['.py', '.pyc'],
-    'Internet': ['.css', '.htm', '.html', '.js', '.php', '.xhtml'],
-    'Data': ['.csv', '.dat', '.db', '.dbf', '.log', '.mdb', '.sav', '.sql',
-             '.tar', '.xml'],
-    'Fonts': ['.fnt', '.fon', '.otf', '.ttf'],
-    'Other': ['']
-}
-
-PATH_TO_VLC = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe"
 
 
 def folder_sort():
@@ -206,3 +185,10 @@ def cprint(col1, col2="", col3="", is_long=False):
         str1 = f"  {col1}".ljust(17)
     str2 = f"{col2}".ljust(25)
     bprint(str1 + str2 + col3, 3)
+
+
+if __name__ != '__main__':
+    with open('src/data.json', 'r') as file:
+        data = json.load(file)
+    EXTENSIONS = data["EXTENSIONS"]
+    PATH_TO_VLC = data["PATH_TO_VLC"]
