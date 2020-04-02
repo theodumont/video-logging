@@ -144,7 +144,6 @@ def file_rename(directory, exit_list, trash_list):
     bprint("Videos renamed!")
 
 
-
 def move_to_dir(file, directory):
     """
     Move file to directory

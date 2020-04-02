@@ -59,5 +59,6 @@ where `file_type` can take the values `videos`.
 I implemented the tests with the Python module `pytest` that can be installed through `pip`. To run the tests, run:
 ```bash
 >> cd video-logging
->> py.test -s
+>> py.test
+>> py.test -s  # verbose
 ```
