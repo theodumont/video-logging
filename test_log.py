@@ -23,12 +23,12 @@ def initialize():
     os.chdir('test_foo')
     # files
     for directory in EXTENSIONS:
-        file_name = f"test_{directory.lower()}{EXTENSIONS[directory][0]}"
+        file_name = f"bar_{directory.lower()}{EXTENSIONS[directory][0]}"
         if not os.path.isfile(file_name):
             Path(file_name).touch()
     # folders
     os.mkdir('Videos')  # folder in scripts
-    os.mkdir('test_folder')  # folder not in scripts
+    os.mkdir('bar_folder')  # folder not in scripts
 
     yield()
 
@@ -37,6 +37,14 @@ def initialize():
     os.chdir("..")
     if os.path.isdir('test_foo'):
         rmtree('test_foo')
+
+
+@pytest.fixture()
+def sort_the_folder():
+    """
+    Sort the folder
+    """
+    log.folder_sort()
 
 
 @pytest.fixture()
@@ -54,12 +62,6 @@ def EXTENSIONS():
 # FUNCTIONS TESTS
 # Starts in 'test_foo' and has to end in 'test_foo'
 
-def test_move(initialize):
-    """
-    Test the move_to_dir function
-    """
-    pass
-
 
 def test_folder(initialize, EXTENSIONS):
     """
@@ -70,22 +72,30 @@ def test_folder(initialize, EXTENSIONS):
         assert os.path.isdir(directory)  # only folders
         assert directory in EXTENSIONS  # script folders
         for file in os.listdir(directory):
-            if os.path.isdir(os.path.join(directory, file)):  # is a folder
+            # if is a folder
+            if os.path.isdir(os.path.join(directory, file)):
                 assert directory == 'Folders'  # folders only in 'Folders'
                 assert file not in EXTENSIONS  # script folders not here
-            else:  # is not a folder
+            # if is not a folder
+            else:
                 name, extension = os.path.splitext(file)
                 assert extension in EXTENSIONS[directory]  # right folder
 
 
-def test_trash(initialize):
+def WIP_test_trash(initialize, sort_the_folder):
     """
     Test the trash_videos function
     """
-    pass
+    os.chdir('Videos')
+    # create videos of different lengths
+    lengths = range(1, 5)
+    for length in lengths:
+        log.trash_videos(length)
+        # assertion for each video
+    os.chdir('../')
 
 
-def test_sort_date(initialize):
+def test_sort_date(initialize, sort_the_folder):
     """
     Test the sort_by_date function
     """

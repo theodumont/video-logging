@@ -5,7 +5,6 @@ CLI for the 'video_logging' module.
 
 import os
 import sys
-import argparse
 try:
     import src.video_logging as log
 except ImportError:
