@@ -33,10 +33,10 @@ def initialize():
     yield()
 
     # destruction
-    print('\nTest files destruction...')
-    os.chdir("..")
-    if os.path.isdir('test_foo'):
-        rmtree('test_foo')
+    # print('\nTest files destruction...')
+    # os.chdir("..")
+    # if os.path.isdir('test_foo'):
+    #     rmtree('test_foo')
 
 
 @pytest.fixture()
