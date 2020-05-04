@@ -63,7 +63,7 @@ class CLI(object):
         """
         Used to leave the tool.
         """
-        print("Leaving the tool...")
+        print("Leaving the tool...\n")
         sys.exit(0)
 
     def process_change_dir(self, split_command, cursor):

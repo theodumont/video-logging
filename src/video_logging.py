@@ -83,7 +83,7 @@ def sort_by_date():
             directory = time.strftime('%y%m%d-%a', creation)
             move_to_dir(file, directory)
 
-    bprint("Videos sorted by date!")
+    print("Videos sorted by date!")
 
 
 def move_to_dir(file, directory):
