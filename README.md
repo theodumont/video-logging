@@ -12,6 +12,15 @@ Python script that can be used to quickly organize rushes from a video shooting 
     2.2. [ Trash useless videos ](#22-trash-useless-videos)  
     2.3. [ Sort by date ](#23-sort-by-date)  
 
+## To do
+
+- [ ] Store help messages in separate file
+    - Find right structure of dict
+- [ ] Find a cleaner way to get EXTENSIONS
+- [ ] Add renamning option
+- [x] Issue when space in name of file
+- [ ] Issue when more than two consecutive spaces in name of file
+
 ## 1. Installation
 
 To use this tool, type in a shell:

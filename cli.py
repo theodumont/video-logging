@@ -75,7 +75,7 @@ class CLI(object):
             print(f"Where do you want to go?")
             print(f"The syntax to change directory is:\n'>> cd <directory>'")
         else:
-            directory = split_command[cursor]
+            directory = " ".join(split_command[cursor:])
             cursor += 1
             try:
                 os.chdir(directory)
