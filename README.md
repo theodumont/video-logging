@@ -1,3 +1,6 @@
+[![License](https://img.shields.io/github/license/theodumont/video-logging)](https://github.com/theodumont/video-logging/blob/master/LICENSE)
+![Windows Support](https://img.shields.io/badge/Windows-Support-brightgreen.svg)
+
 # Video logging for editing
 
 Python script that can be used to quickly organize rushes from a video shooting session.
