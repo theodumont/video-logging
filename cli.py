@@ -5,16 +5,22 @@ CLI for the 'video_logging' module.
 
 import os
 import sys
+import json
 import src.video_logging as log
 
 
 class CLI(object):
     """CLI for the 'video_logging' module."""
 
-    def __init__(self):
+    def __init__(self, data):
         """
         Class constructor.
         """
+        # data files
+        self.EXTENSIONS = data["EXTENSIONS"]
+        self.PATH_TO_VLC = data["PATH_TO_VLC"]
+        self.HELP = data["HELP"]
+        self.HEADER = data["HEADER"]
         # List of all parameters accepted to trigger the different modes.
         self.change_list = ["cd", "c", "go"]
         self.folder_list = ["folder", "f", "folders"]
@@ -52,7 +58,7 @@ class CLI(object):
             self.process_date()
 
         elif instruction.lower() in self.help_list:
-            self.process_help(split_command, cursor)
+            self.process_help(split_command, cursor, self.EXTENSIONS, self.HELP)
 
         elif instruction.lower() in self.exit_list:
             self.exit()
@@ -116,62 +122,43 @@ class CLI(object):
         """
         log.sort_by_date()
 
-    def process_help(self, split_command, cursor):
+    def process_help(self, split_command, cursor, EXTENSIONS, HELP):
         """
         When the 'help' command is read.
         """
-        print("")
         if len(split_command) == cursor:
             # i.e. no more arguments to read, just printing command list.
-            command_help = (
-            "All possible input commands are :\n\n"
-            " - change : Changes the current directory. For more information about change, please use 'help change'.\n"
-            " - folder : Sorts the current directory files in folders. For more information about folder, please use 'help folder'.\n"
-            " - trash : Trashes the useless videos. For more information about trash, please use 'help trash'.\n"
-            " - date : Sorts the current directory files in folders by date. For more information about date, pleasse use 'help date'.\n"
-            " - help : Brings out various help message, including this one.\n"
-            " - exit : Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).\n\n"
-            "The usual way to use the tool is to type the following successive instructions:\n"
-            "'>> cd foo'\n"
-            "'>> folder'\n"
-            "'>> cd Videos'\n"
-            "'>> trash 3'\n"
-            "'>> date'\n"
-            "but you can do what you want!\n"
-            )
-            print(command_help)
+            print("".join(HELP["help"]))
         else:
             topic = split_command[cursor]
             cursor += 1
             if topic in self.exit_list:
-                print("The 'exit' command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).")
+                print(HELP["exit"])
             elif topic in self.change_list:
-                print("The 'change' command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'")
+                print(HELP["change"])
             elif topic in self.folder_list:
-                print("The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:\n'>> folder'\n\nThe repositories and the extensions they will contain are:")
-                for directory in log.EXTENSIONS:
-                    print(f"{directory}:".ljust(11, ' ') + str(log.EXTENSIONS[directory]))
-                print("If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.")
+                print(HELP["folder"])
+                for directory in EXTENSIONS:
+                    print(f"{directory}:".ljust(11, ' ') + str(EXTENSIONS[directory]))
+                print(HELP["folder-creation"])
             elif topic in self.trash_list:
-                print("The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,\n'>> trash <time_limit>'\nwhere time_limit is the video length threshold.")
+                print(HELP["trash"])
             elif topic in self.date_list:
-                print("The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:\n'>> date'\nThe repositories will be in the form of 'YYMMDD-Day'.\n")
+                print(HELP["date"])
             elif topic in self.help_list:
-                print("Why are you here?")
+                print(HELP["help-twice"])
+            else:
+                print(HELP["other"])
+
 
 
 if __name__ == '__main__':
     os.system('cls')
-    cli = CLI()
+    with open('src/data.json', 'r') as file:
+        data = json.load(file)
+    cli = CLI(data)
 
-    header = (
-    "\n"
-    "==============================================================================\n"
-    "  This tool was designed by Théo Dumont and all the source code is available  \n"
-    "   at https://github.com/theodumont/video-logging under the GPL 3 License.    \n"
-    "==============================================================================\n"
-             )
-    print(header)
+    print("".join(cli.HEADER))
 
     while True:
         try:
