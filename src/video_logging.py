@@ -11,11 +11,10 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 
 
 def folder_sort():
-    """
-    Sort the files into directories according to their extension.
-    Create the directories if they don't exist.
-    """
+    r"""Sort the files into directories according to their extension.
 
+    Create the extensions directories if they don't exist.
+    """
     print("Sorting files...")
 
     for file in os.listdir():
@@ -40,14 +39,27 @@ def folder_sort():
 
 
 def trash_videos(time_limit):
-    """
-    Trash the videos that are shorter than time_limit to get rid of
-    all the shooting errors.
-    """
+    r"""Trash the videos that are shorter than time_limit to get rid of
+    the shooting errors.
 
+    Parameters
+    ----------
+    time_limit : int
+        Duration limit.
+    """
     def move_to_trash(file, duration):
-        """
-        Move a video to Trash if it is too short.
+        r"""Move a video to trash if it is too short.
+
+        Check if a directory named `Trash` exists in current directory. If not,
+        create it. Then, move `file` in `Trash` if `duration` is smaller than
+        `time_limit`.
+
+        Parameters
+        ----------
+        file : string
+            File to check.
+        duration : int
+            Duration of video file.
         """
         if duration < time_limit:
             if not os.path.isdir('Trash'):
@@ -70,10 +82,10 @@ def trash_videos(time_limit):
 
 
 def sort_by_date():
-    """
-    Sort files in directories by date.
-    """
+    r"""Sort files in directories by creation date.
 
+    The repositories will be in the form of 'YYMMDD-Day'.
+    """
     print("Sorting files by date...")
 
     for file in os.listdir():
@@ -87,8 +99,17 @@ def sort_by_date():
 
 
 def move_to_dir(file, directory):
-    """
-    Move file to directory
+    r"""Move file to directory.
+
+    Check if a directory named `directory` exists in current directory. If not,
+    create it. Then, move `file` in `directory`.
+
+    Parameters
+    ----------
+    file : string
+        File to move.
+    directory : string
+        Target directory.
     """
     if not os.path.isdir(directory):
         os.mkdir('./{}'.format(directory))
