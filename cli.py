@@ -158,7 +158,7 @@ if __name__ == '__main__':
         data = json.load(file)
     cli = CLI(data)
 
-    print("".join(cli.HEADER))
+    print("\n".join(cli.HEADER))
 
     while True:
         try:

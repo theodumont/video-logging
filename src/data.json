@@ -1,54 +1,48 @@
 {
-  "EXTENSIONS": {
-      "Audio": [".wav", ".mp3", ".raw", ".wma", ".aif", ".cda", ".mid", ".midi",
-                ".mpa", ".ogg", ".wpl"],
-      "Videos": [".mp4", ".m4a", ".m4v", ".f4v", ".f4a", ".f4b", ".m4b", ".m4r",
-                 ".avi", ".wmv", ".flv", ".MOV"],
-      "Images": [".ai", ".bmp", ".gif", ".ico", ".jpeg", ".jpg", ".png", ".ps",
-                 ".svg", ".tif", ".tiff"],
-      "Documents": [".txt", ".pdf", ".doc", ".docx", ".odt", ".html", ".md",
-                    ".rtf", ".xlsx", ".pptx", ".tex", ".key", ".odp", ".pps",
-                    ".ppt", ".pptx", ".ods"],
-      "Folders": [".rar", ".zip", "7z", ".pkg", ".z", ".tar.gz"],
-      "Python": [".py", ".pyc"],
-      "Internet": [".css", ".htm", ".html", ".js", ".php", ".xhtml"],
-      "Data": [".csv", ".dat", ".db", ".dbf", ".log", ".mdb", ".sav", ".sql",
-               ".tar", ".xml"],
-      "Fonts": [".fnt", ".fon", ".otf", ".ttf"],
-      "Other": [""]
-  },
-  "PATH_TO_VLC": "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe",
-  "HELP": {
-      "help": [
-          "All possible input commands are :\n",
-          " - change : Changes the current directory. For more information about change, please use 'help change'.\n",
-          " - folder : Sorts the current directory files in folders. For more information about folder, please use 'help folder'.\n",
-          " - trash : Trashes the useless videos. For more information about trash, please use 'help trash'.\n",
-          " - date : Sorts the current directory files in folders by date. For more information about date, pleasse use 'help date'.\n",
-          " - help : Brings out various help message, including this one.\n",
-          " - exit : Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).\n",
-          "The usual way to use the tool is to type the following successive instructions:\n",
-          "'>> cd foo'\n",
-          "'>> folder'\n",
-          "'>> cd Videos'\n",
-          "'>> trash 3'\n",
-          "'>> date'\n",
-          "but you can do what you want!"
-      ],
-      "exit": "The 'exit' command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).",
-      "change": "The 'change' command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'",
-      "folder": "The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:\n'>> folder'\n\nThe repositories and the extensions they will contain are:",
-      "folder-creation": "If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.",
-      "trash": "The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,\n'>> trash <time_limit>'\nwhere time_limit is the video length threshold.",
-      "date": "The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:\n'>> date'\nThe repositories will be in the form of 'YYMMDD-Day'.\n",
-      "help-twice": "Why are you here?",
-      "other": "The command couldn't be parsed. Try typing 'help' to see the possible input commands."
-  },
-  "HEADER": [
-      "\n",
-      "==============================================================================\n",
-      "  This tool was designed by Théo Dumont and all the source code is available  \n",
-      "   at https://github.com/theodumont/video-logging under the GPL 3 License.    \n",
-      "==============================================================================\n"
-  ]
+    "EXTENSIONS": {
+        "Audio": [".wav", ".mp3", ".raw", ".wma", ".aif", ".cda", ".mid", ".midi", ".mpa", ".ogg", ".wpl"],
+        "Videos": [".mp4", ".m4a", ".m4v", ".f4v", ".f4a", ".f4b", ".m4b", ".m4r", ".avi", ".wmv", ".flv", ".MOV"],
+        "Images": [".ai", ".bmp", ".gif", ".ico", ".jpeg", ".jpg", ".png", ".ps", ".svg", ".tif", ".tiff"],
+        "Documents": [".txt", ".pdf", ".doc", ".docx", ".odt", ".html", ".md", ".rtf", ".xlsx", ".pptx", ".tex", ".key", ".odp", ".pps", ".ppt", ".pptx", ".ods"],
+        "Folders": [".rar", ".zip", "7z", ".pkg", ".z", ".tar.gz"],
+        "Python": [".py", ".pyc"],
+        "Internet": [".css", ".htm", ".html", ".js", ".php", ".xhtml"],
+        "Data": [".csv", ".dat", ".db", ".dbf", ".log", ".mdb", ".sav", ".sql", ".tar", ".xml"],
+        "Fonts": [".fnt", ".fon", ".otf", ".ttf"],
+        "Other": [""]
+    },
+    "PATH_TO_VLC": "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe",
+    "HELP": {
+        "help": [
+            "All possible input commands are :\n",
+            " - change : Changes the current directory. For more information about change, please use 'help change'.\n",
+            " - folder : Sorts the current directory files in folders. For more information about folder, please use 'help folder'.\n",
+            " - trash : Trashes the useless videos. For more information about trash, please use 'help trash'.\n",
+            " - date : Sorts the current directory files in folders by date. For more information about date, pleasse use 'help date'.\n",
+            " - help : Brings out various help message, including this one.\n",
+            " - exit : Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).\n",
+            "The usual way to use the tool is to type the following successive instructions:\n",
+            "'>> cd foo'\n",
+            "'>> folder'\n",
+            "'>> cd Videos'\n",
+            "'>> trash 3'\n",
+            "'>> date'\n",
+            "but you can do what you want!"
+        ],
+        "exit": "The 'exit' command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).",
+        "change": "The 'change' command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'",
+        "folder": "The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:\n'>> folder'\n\nThe repositories and the extensions they will contain are:",
+        "folder-creation": "If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.",
+        "trash": "The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,\n'>> trash <time_limit>'\nwhere time_limit is the video length threshold.",
+        "date": "The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:\n'>> date'\nThe repositories will be in the form of 'YYMMDD-Day'.\n",
+        "help-twice": "Why are you here?",
+        "other": "The command couldn't be parsed. Try typing 'help' to see the possible input commands."
+    },
+    "HEADER": [
+        "\n",
+        "==============================================================================",
+        "  This tool was designed by Théo Dumont and all the source code is available  ",
+        "   at https://github.com/theodumont/video-logging under the GPL 3 License.    ",
+        "=============================================================================="
+    ]
 }
