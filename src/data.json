@@ -11,7 +11,6 @@
         "Fonts": [".fnt", ".fon", ".otf", ".ttf"],
         "Other": [""]
     },
-    "PATH_TO_VLC": "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe",
     "HELP": {
         "help": [
             "All possible input commands are :\n",
@@ -41,7 +40,7 @@
     "HEADER": [
         "\n",
         "==============================================================================",
-        "  This tool was designed by Théo Dumont and all the source code is available  ",
+        "  This tool was designed by Theo Dumont and all the source code is available  ",
         "   at https://github.com/theodumont/video-logging under the GPL 3 License.    ",
         "=============================================================================="
     ]

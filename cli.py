@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-CLI for the 'video_logging' module.
+CLI for the video_logging.py module.
 """
 
 import os
@@ -10,7 +10,7 @@ import src.video_logging as log
 
 
 class CLI(object):
-    """CLI for the 'video_logging' module."""
+    """CLI for the video_logging module."""
 
     def __init__(self, data):
         """
@@ -18,10 +18,9 @@ class CLI(object):
         """
         # data files
         self.EXTENSIONS = data["EXTENSIONS"]
-        self.PATH_TO_VLC = data["PATH_TO_VLC"]
         self.HELP = data["HELP"]
         self.HEADER = data["HEADER"]
-        # List of all parameters accepted to trigger the different modes.
+        # list of all parameters accepted to trigger the different modes.
         self.change_list = ["cd", "c", "go"]
         self.folder_list = ["folder", "f", "folders"]
         self.trash_list = ["trash", "t", "short"]
@@ -94,7 +93,7 @@ class CLI(object):
         """
         When the 'folder' command is read.
         """
-        log.folder_sort()
+        log.folder_sort(self.EXTENSIONS)
 
     def process_trash(self, split_command, cursor):
         """
@@ -112,7 +111,7 @@ class CLI(object):
                 if int_time_limit <= 0:
                     print(f"You asked the tool to take {time_limit} as a time limit, but negative (zero included) values are not valid in that context. Please input a positive integer.")
                 else:
-                    log.trash_videos(int_time_limit)
+                    log.trash_videos(int_time_limit, self.EXTENSIONS)
             except ValueError as e:
                 print(f"Could not parse {time_limit} as a positive int. The correct syntax to choose the time limit is :\n'>> trash <time_limit>'")
 
@@ -162,7 +161,7 @@ if __name__ == '__main__':
 
     while True:
         try:
-            print("")
+            print()
             print(cli.folder)
             command = input(">> ")
             cli.read_command(command)

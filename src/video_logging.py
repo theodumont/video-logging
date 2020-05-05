@@ -1,6 +1,9 @@
 # encoding: utf-8
-"""
-Cleans a folder to simplify the video logging process.
+"""Functions used by the cli.py script.
+
+Makes the process of cleaning a folder easier and simplifies the
+video logging process.
+
 """
 
 import os
@@ -10,7 +13,7 @@ import subprocess
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
 
-def folder_sort():
+def folder_sort(EXTENSIONS):
     r"""Sort the files into directories according to their extension.
 
     Create the extensions directories if they don't exist.
@@ -38,7 +41,7 @@ def folder_sort():
     print("Files sorted by type!")
 
 
-def trash_videos(time_limit):
+def trash_videos(time_limit, EXTENSIONS):
     r"""Trash the videos that are shorter than time_limit to get rid of
     the shooting errors.
 
@@ -114,11 +117,3 @@ def move_to_dir(file, directory):
     if not os.path.isdir(directory):
         os.mkdir('./{}'.format(directory))
     os.rename(file, os.path.join(directory, file))
-
-
-
-if __name__ != '__main__':
-    with open('src/data.json', 'r') as file:
-        data = json.load(file)
-    EXTENSIONS = data["EXTENSIONS"]
-    PATH_TO_VLC = data["PATH_TO_VLC"]
