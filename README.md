@@ -11,16 +11,13 @@ Python script that can be used to quickly organize rushes from a video shooting 
 
 1. [ Installation ](#1-installation)  
 2. [ Features ](#2-features)  
-    2.1. [ Sort by extension ](#21-sort-by-extension)  
-    2.2. [ Trash useless videos ](#22-trash-useless-videos)  
-    2.3. [ Sort by date ](#23-sort-by-date)  
 
 ## To do
 
-- [ ] Store help messages in separate file
+- [x] Store help messages in separate file
     - Find right structure of dict
-- [ ] Find a cleaner way to get EXTENSIONS
-- [ ] Add renamning option
+- [x] Find a cleaner way to get EXTENSIONS
+- [ ] Add renaming option
 - [x] Issue when space in name of file
 - [ ] Issue when more than two consecutive spaces in name of file
 
@@ -39,19 +36,16 @@ Don't hesitate to use the `help` command to understand the different functions o
 
 To naviguate trough directories, you can use the `>> cd` command.
 
-### 2.1. Sort by extension
 To sort files by extension, type:
 ```bash
 >> folder
 ```
 
-### 2.2. Trash useless videos
 To trash the videos of length shorter than `time_limit`, type:
 ```bash
 >> trash <time_limit>
 ```
 
-### 2.3. Sort by date
 To sort files by date, type:
 ```bash
 >> date
