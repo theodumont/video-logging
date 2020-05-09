@@ -20,6 +20,8 @@ Python script that can be used to quickly organize rushes from a video shooting 
 - [ ] Add renaming option
 - [x] Issue when space in name of file
 - [ ] Issue when more than two consecutive spaces in name of file
+- [x] Add progress bar
+- [ ] Add warning when sorting folder where `video-logging` is
 
 ## 1. Installation
 

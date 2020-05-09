@@ -11,6 +11,8 @@ import time
 import json
 import subprocess
 from moviepy.video.io.VideoFileClip import VideoFileClip
+from progress.bar import Bar, IncrementalBar
+
 
 
 def folder_sort(EXTENSIONS):
@@ -18,7 +20,8 @@ def folder_sort(EXTENSIONS):
 
     Create the extensions directories if they don't exist.
     """
-    print("Sorting files...")
+    n = len(os.listdir())
+    bar = IncrementalBar("Sorting files...", max=n)
 
     for file in os.listdir():
         time.sleep(.001)
@@ -37,7 +40,8 @@ def folder_sort(EXTENSIONS):
                     break
             if not treated:
                 move_to_dir(file, 'Other')
-
+        bar.next()
+    bar.finish()
     print("Files sorted by type!")
 
 
@@ -71,7 +75,8 @@ def trash_videos(time_limit, EXTENSIONS):
         else:
             pass
 
-    print(f"Trashing videos of duration <= {time_limit}s...")
+    n = len(os.listdir())
+    bar = IncrementalBar(f"Trashing videos of duration <= {time_limit}s...", max=n)
 
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
@@ -80,7 +85,9 @@ def trash_videos(time_limit, EXTENSIONS):
                 time.sleep(.001)
                 duration = clip.duration
             move_to_trash(file, duration)
+        bar.next()
 
+    bar.finish()
     print("Files trashed!")
 
 
@@ -89,15 +96,17 @@ def sort_by_date():
 
     The repositories will be in the form of 'YYMMDD-Day'.
     """
-    print("Sorting files by date...")
-
+    n = len(os.listdir())
+    bar = IncrementalBar(f"Sorting files by date...", max=n)
     for file in os.listdir():
         if not os.path.isdir(file):
             time.sleep(.001)
             creation = time.localtime(os.path.getmtime(file))
             directory = time.strftime('%y%m%d-%a', creation)
             move_to_dir(file, directory)
+        bar.next()
 
+    bar.finish()
     print("Videos sorted by date!")
 
 
