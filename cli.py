@@ -184,12 +184,8 @@ if __name__ == '__main__':
             print(cli.folder)
             command = input(">> ")
             cli.read_command(command)
-        except OSError:
-            cli.print_warning(
-                "! Warning: the current directory contains the 'video-logging' scripts.\n"
-                "! Moving files may do bad things.\n"
-                "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
-            )
+        except OSError as e:
+            cli.print_warning(str(e))
         except (EOFError, KeyboardInterrupt):
             print("exit")  # In order to avoid ugly output
             cli.exit()

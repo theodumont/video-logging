@@ -21,7 +21,7 @@ def folder_sort(EXTENSIONS):
     Create the extensions directories if they don't exist.
     """
     check_parent()
-    n = len(os.listdir())
+    n = get_number_files(EXTENSIONS)
     bar = IncrementalBar("Sorting files...", max=n)
 
     for file in os.listdir():
@@ -43,7 +43,7 @@ def folder_sort(EXTENSIONS):
                 move_to_dir(file, 'Other')
         bar.next()
     bar.finish()
-    print("Files sorted by type!")
+    print("Files sorted by type.")
 
 
 def trash_videos(time_limit, EXTENSIONS):
@@ -73,24 +73,28 @@ def trash_videos(time_limit, EXTENSIONS):
             if not os.path.isdir('Trash'):
                 os.mkdir('./Trash')
             os.rename(file, os.path.join('Trash', file))
-        else:
-            pass
+            return True
+        return False
 
     check_parent()
-    n = len(os.listdir())
+    n = get_number_files(EXTENSIONS, directory='Videos')
+    print(n)
     bar = IncrementalBar(f"Trashing videos of duration <= {time_limit}s...", max=n)
 
+    nb_trashed = 0
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
         if extension in EXTENSIONS['Videos']:
             with VideoFileClip(file) as clip:
                 time.sleep(.001)
                 duration = clip.duration
-            move_to_trash(file, duration)
-        bar.next()
+            if move_to_trash(file, duration):
+                nb_trashed += 1
+            bar.next()
 
     bar.finish()
-    print("Files trashed!")
+    term = 's' * (nb_trashed >= 2)
+    print(f"{nb_trashed} file{term} trashed.")
 
 
 def sort_by_date():
@@ -110,7 +114,7 @@ def sort_by_date():
         bar.next()
 
     bar.finish()
-    print("Videos sorted by date!")
+    print("Videos sorted by date.")
 
 
 def move_to_dir(file, directory):
@@ -132,6 +136,27 @@ def move_to_dir(file, directory):
 
 
 def check_parent():
+    """
+    Check if 'video-logging' scripts are in cwd.
+    """
     for root, dirs, files in os.walk("./"):
         if ".videolog" in files:
-            raise OSError()
+            raise OSError(
+                "! Warning: the current directory contains the 'video-logging' scripts.\n"
+                "! Moving files may do bad things.\n"
+                "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
+            )
+
+
+def get_number_files(EXTENSIONS, directory='all'):
+    """
+    Return number of file of a certain type in cwd.
+    """
+    if directory == 'all':
+        return len(os.listdir())
+    count = 0
+    for file in os.listdir():
+        extension = os.path.splitext(file)[1]
+        if extension in EXTENSIONS[directory]:
+            count += 1
+    return count

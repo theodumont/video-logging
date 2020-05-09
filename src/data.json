@@ -1,7 +1,7 @@
 {
     "EXTENSIONS": {
         "Audio": [".wav", ".mp3", ".raw", ".wma", ".aif", ".cda", ".mid", ".midi", ".mpa", ".ogg", ".wpl"],
-        "Videos": [".mp4", ".m4a", ".m4v", ".f4v", ".f4a", ".f4b", ".m4b", ".m4r", ".avi", ".wmv", ".flv", ".MOV"],
+        "Videos": [".mp4", ".m4a", ".m4v", ".f4v", ".f4a", ".f4b", ".m4b", ".m4r", ".avi", ".wmv", ".flv", ".MOV", ".mov"],
         "Images": [".ai", ".bmp", ".gif", ".ico", ".jpeg", ".jpg", ".png", ".ps", ".svg", ".tif", ".tiff"],
         "Documents": [".txt", ".pdf", ".doc", ".docx", ".odt", ".html", ".md", ".rtf", ".xlsx", ".pptx", ".tex", ".key", ".odp", ".pps", ".ppt", ".pptx", ".ods"],
         "Folders": [".rar", ".zip", "7z", ".pkg", ".z", ".tar.gz"],
