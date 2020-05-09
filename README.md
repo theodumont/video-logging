@@ -22,7 +22,7 @@ Python script that can be used to quickly organize rushes from a video shooting 
 - [ ] Issue when more than two consecutive spaces in name of file
 - [x] Add progress bar
 - [x] Add warning when sorting folder where `video-logging` is
-- [ ] Add color in terminal ?
+- [x] Add color in terminal ?
 
 ## 1. Installation
 

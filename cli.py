@@ -7,6 +7,7 @@ import os
 import sys
 import json
 import src.video_logging as log
+from termcolor import cprint
 
 
 class CLI(object):
@@ -62,7 +63,7 @@ class CLI(object):
         elif instruction.lower() in self.exit_list:
             self.exit()
         else:
-            print(f"The input command {command} could not be parsed, because the tool did not understand the term '{instruction}'. If you wish to you can use :\n'>> help'\nThat instruction will bring a list of the available instruction and their use cases.")
+            self.print_error(f"The input command {command} could not be parsed, because the tool did not understand the term '{instruction}'. If you wish to you can use :\n'>> help'\nThat instruction will bring a list of the available instruction and their use cases.")
 
     def exit(self):
         """
@@ -77,8 +78,10 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            print(f"Where do you want to go?")
-            print(f"The syntax to change directory is:\n'>> cd <directory>'")
+            self.print_warning(
+                "Where do you want to go?\n"
+                "The syntax to change directory is:\n'>> cd <directory>'"
+            )
         else:
             directory = " ".join(split_command[cursor:])
             cursor += 1
@@ -87,7 +90,7 @@ class CLI(object):
                 self.folder = os.getcwd()
                 # display(self)
             except FileNotFoundError as e:
-                print(f"Cannot find the {directory} directory. The correct syntax to change the directory is :\n'>> cd <directory>'")
+                self.print_error(f"Cannot find the {directory} directory. The correct syntax to change the directory is :\n'>> cd <directory>'")
 
     def process_folder(self):
         """
@@ -101,19 +104,23 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            print(f"What time limit do you want to impose?")
-            print(f"The syntax to choose the time limit is:\n'>> trash <time limit>'\nTime limit has to be a positive int value.")
+            self.print_warning(
+                "What time limit do you want to impose?\n"
+                "The syntax to choose the time limit is:\n"
+                "'>> trash <time limit>'"
+                "\nTime limit has to be a positive int value."
+            )
         else:
             time_limit = split_command[cursor]
             cursor += 1
             try:
                 int_time_limit = int(time_limit)
                 if int_time_limit <= 0:
-                    print(f"You asked the tool to take {time_limit} as a time limit, but negative (zero included) values are not valid in that context. Please input a positive integer.")
+                    self.print_error(f"You asked the tool to take {time_limit} as a time limit, but negative (zero included) values are not valid in that context. Please input a positive integer.")
                 else:
                     log.trash_videos(int_time_limit, self.EXTENSIONS)
             except ValueError as e:
-                print(f"Could not parse {time_limit} as a positive int. The correct syntax to choose the time limit is :\n'>> trash <time_limit>'")
+                self.print_error(f"Could not parse {time_limit} as a positive int. The correct syntax to choose the time limit is :\n'>> trash <time_limit>'")
 
     def process_date(self):
         """
@@ -149,6 +156,18 @@ class CLI(object):
             else:
                 print(HELP["other"])
 
+    def print_error(self, string):
+        """
+        Print an error.
+        """
+        cprint(string, 'red', file=sys.stderr)
+
+    def print_warning(self, string):
+        """
+        Print a warning.
+        """
+        cprint(string, 'yellow', file=sys.stderr)
+
 
 
 if __name__ == '__main__':
@@ -166,7 +185,7 @@ if __name__ == '__main__':
             command = input(">> ")
             cli.read_command(command)
         except OSError:
-            print(
+            cli.print_warning(
                 "! Warning: the current directory contains the 'video-logging' scripts.\n"
                 "! Moving files may do bad things.\n"
                 "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
