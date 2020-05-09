@@ -20,6 +20,7 @@ def folder_sort(EXTENSIONS):
 
     Create the extensions directories if they don't exist.
     """
+    check_parent()
     n = len(os.listdir())
     bar = IncrementalBar("Sorting files...", max=n)
 
@@ -75,6 +76,7 @@ def trash_videos(time_limit, EXTENSIONS):
         else:
             pass
 
+    check_parent()
     n = len(os.listdir())
     bar = IncrementalBar(f"Trashing videos of duration <= {time_limit}s...", max=n)
 
@@ -96,6 +98,7 @@ def sort_by_date():
 
     The repositories will be in the form of 'YYMMDD-Day'.
     """
+    check_parent()
     n = len(os.listdir())
     bar = IncrementalBar(f"Sorting files by date...", max=n)
     for file in os.listdir():
@@ -126,3 +129,9 @@ def move_to_dir(file, directory):
     if not os.path.isdir(directory):
         os.mkdir('./{}'.format(directory))
     os.rename(file, os.path.join(directory, file))
+
+
+def check_parent():
+    for root, dirs, files in os.walk("./"):
+        if ".videolog" in files:
+            raise OSError()
