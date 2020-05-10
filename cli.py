@@ -22,7 +22,7 @@ class CLI(object):
         self.HELP = data["HELP"]
         self.HEADER = data["HEADER"]
         # list of all parameters accepted to trigger the different modes.
-        self.change_list = ["cd", "c", "go"]
+        self.cd_list = ["cd", "c", "go"]
         self.folder_list = ["folder", "f", "folders"]
         self.trash_list = ["trash", "t", "short"]
         self.date_list = ["date", "d", "when"]
@@ -48,7 +48,7 @@ class CLI(object):
         instruction = split_command[0]
         cursor += 1
 
-        if instruction.lower() in self.change_list:
+        if instruction.lower() in self.cd_list:
             self.process_change_dir(split_command, cursor)
 
         elif instruction.lower() in self.folder_list:
@@ -175,8 +175,8 @@ class CLI(object):
             cursor += 1
             if topic in self.exit_list:
                 print(HELP["exit"])
-            elif topic in self.change_list:
-                print(HELP["change"])
+            elif topic in self.cd_list:
+                print(HELP["cd"])
             elif topic in self.folder_list:
                 print(HELP["folder"])
                 for directory in EXTENSIONS:
@@ -198,7 +198,7 @@ class CLI(object):
         Print the input headline.
         """
         prefix = colored("(sudo) ", "yellow") * self.sudo
-        suffix = colored(self.folder, "cyan")
+        suffix = colored(self.folder + ">", "cyan")
         print(f"{prefix}{suffix}")
 
 

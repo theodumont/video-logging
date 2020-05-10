@@ -14,7 +14,7 @@
     "HELP": {
         "help": [
             "All possible input commands are :\n",
-            " - change : Changes the current directory. For more information about change, please use 'help change'.\n",
+            " - cd : Changes the current directory. For more information about change, please use 'help cd'.\n",
             " - folder : Sorts the current directory files in folders. For more information about folder, please use 'help folder'.\n",
             " - trash : Trashes the useless videos. For more information about trash, please use 'help trash'.\n",
             " - date : Sorts the current directory files in folders by date. For more information about date, pleasse use 'help date'.\n",
@@ -29,7 +29,7 @@
             "but you can do what you want!"
         ],
         "exit": "The 'exit' command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).",
-        "change": "The 'change' command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'",
+        "cd": "The 'cd' command changes the current directory. The syntax to change directory is:\n'>> cd <directory>'",
         "folder": "The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:\n'>> folder'\n\nThe repositories and the extensions they will contain are:",
         "folder-creation": "If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.",
         "trash": "The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,\n'>> trash <time_limit>'\nwhere time_limit is the video length threshold.",
