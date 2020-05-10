@@ -25,7 +25,7 @@ pip install -r requirements.txt
 # launch tool
 python cli.py
 ```
-It will run the tool, waiting for an input.
+It will run the tool, waiting for your input.
 
 ## 2. How to use
 
