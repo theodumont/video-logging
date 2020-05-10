@@ -18,11 +18,12 @@ Python script that can be used to quickly organize rushes from a video shooting 
     - Find right structure of dict
 - [x] Find a cleaner way to get EXTENSIONS
 - [ ] Add renaming option
-- [x] Issue when space in name of file
+- [ ] Issue when space in name of file
 - [ ] Issue when more than two consecutive spaces in name of file
 - [x] Add progress bar
 - [x] Add warning when sorting folder where `video-logging` is
-    - [ ] Add possibility to choose sudo mode (don't check)
+    - [x] Add possibility to choose sudo mode (don't check)
+    - [ ] Use custom exception
 - [x] Add color in terminal ?
 - [ ] Notify when folder empty
 

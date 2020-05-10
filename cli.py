@@ -7,7 +7,7 @@ import os
 import sys
 import json
 import src.video_logging as log
-from termcolor import cprint
+from termcolor import cprint, colored
 
 
 class CLI(object):
@@ -27,9 +27,12 @@ class CLI(object):
         self.trash_list = ["trash", "t", "short"]
         self.date_list = ["date", "d", "when"]
         self.help_list = ["help", "h", "?", "what", "how"]
+        self.sudo_list = ["sudo"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
         # folder to clean
         self.folder = os.getcwd()
+        # sudo mode
+        self.sudo = False
 
     def read_command(self, command):
         """
@@ -60,6 +63,9 @@ class CLI(object):
         elif instruction.lower() in self.help_list:
             self.process_help(split_command, cursor, self.EXTENSIONS, self.HELP)
 
+        elif instruction.lower() in self.sudo_list:
+            self.process_sudo(split_command, cursor)
+
         elif instruction.lower() in self.exit_list:
             self.exit()
         else:
@@ -79,18 +85,18 @@ class CLI(object):
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
             self.print_warning(
-                "Where do you want to go?\n"
-                "The syntax to change directory is:\n'>> cd <directory>'"
+                "The syntax to change directory is:\n"
+                "'>> cd <directory>'"
             )
         else:
-            directory = " ".join(split_command[cursor:])
+            directory = split_command[cursor]
             cursor += 1
             try:
                 os.chdir(directory)
                 self.folder = os.getcwd()
                 # display(self)
             except FileNotFoundError as e:
-                self.print_error(f"Cannot find the {directory} directory. The correct syntax to change the directory is :\n'>> cd <directory>'")
+                self.print_error(f"Cannot find the '{directory}' directory.")
 
     def process_folder(self):
         """
@@ -105,10 +111,8 @@ class CLI(object):
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
             self.print_warning(
-                "What time limit do you want to impose?\n"
                 "The syntax to choose the time limit is:\n"
                 "'>> trash <time limit>'"
-                "\nTime limit has to be a positive int value."
             )
         else:
             time_limit = split_command[cursor]
@@ -116,17 +120,48 @@ class CLI(object):
             try:
                 int_time_limit = int(time_limit)
                 if int_time_limit <= 0:
-                    self.print_error(f"You asked the tool to take {time_limit} as a time limit, but negative (zero included) values are not valid in that context. Please input a positive integer.")
+                    self.print_error(f"Negative (zero included) values are not valid. Please input a positive integer.")
                 else:
                     log.trash_videos(int_time_limit, self.EXTENSIONS)
             except ValueError as e:
-                self.print_error(f"Could not parse {time_limit} as a positive int. The correct syntax to choose the time limit is :\n'>> trash <time_limit>'")
+                self.print_error(f"Could not parse '{time_limit}' as a positive int. Please input a positive integer.")
 
     def process_date(self):
         """
         When the 'date' command is read.
         """
         log.sort_by_date()
+
+    def process_sudo(self, split_command, cursor):
+        """
+        When the 'sudo' command is read.
+        """
+        if len(split_command) == cursor:
+            # i.e. we have no more arguments available
+            self.print_warning(
+                "The syntax to change sudo mode is:\n"
+                "'>> sudo off'"
+            )
+        else:
+            mode = split_command[cursor]
+            cursor += 1
+            if mode.lower() == "on":
+                self.sudo = True
+                self.print_warning(
+                    "! Warning: sudo mode activated. The tool will not check if the current directory contains the 'video-logging' scripts anymore.\n"
+                    "! Moving files may do bad things.\n"
+                    "! You can turn the sudo mode back off using:\n"
+                    "'>> sudo off'"
+                )
+            elif mode.lower() == "off":
+                self.sudo = False
+                self.print_warning(
+                    "sudo mode deactivated."
+                )
+            else:
+                self.print_error(
+                    "The possible values for sudo mode are 'on' and 'off'."
+                )
 
     def process_help(self, split_command, cursor, EXTENSIONS, HELP):
         """
@@ -151,10 +186,21 @@ class CLI(object):
                 print(HELP["trash"])
             elif topic in self.date_list:
                 print(HELP["date"])
+            elif topic in self.sudo_list:
+                print(HELP["sudo"])
             elif topic in self.help_list:
                 print(HELP["help-twice"])
             else:
                 print(HELP["other"])
+
+    def print_dir(self):
+        """
+        Print the input headline.
+        """
+        prefix = colored("(sudo) ", "yellow") * self.sudo
+        suffix = colored(self.folder, "cyan")
+        print(f"{prefix}{suffix}")
+
 
     def print_error(self, string):
         """
@@ -181,8 +227,8 @@ if __name__ == '__main__':
     while True:
         try:
             print()
-            print(cli.folder)
-            command = input(">> ")
+            cli.print_dir()
+            command = input(colored(">> ", "cyan"))
             cli.read_command(command)
         except OSError as e:
             cli.print_warning(str(e))
