@@ -33,7 +33,7 @@
         "folder": "The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:\n'>> folder'\n\nThe repositories and the extensions they will contain are:",
         "folder-creation": "If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.",
         "trash": "The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,\n'>> trash <time_limit>'\nwhere time_limit is the video length threshold.",
-        "date": "The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:\n'>> date'\nThe repositories will be in the form of 'YYMMDD-Day'.\n",
+        "date": "The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:\n'>> date'\nThe folders will be in the form of 'YYMMDD-Day'.\n",
         "sudo": "If these python scripts are moved by the tool, bad things may happen. Therefore by default, the tool checks if the current directory contains the 'video-logging' folder in its arborescence by looking for the '.videolog' file. This process is usually quite fast but it may take a while when dealing with big directories. The 'sudo' command allows to deactivate this checking, increasing the speed of the tool:\n'>> sudo on'\nUse at your on risks. To deactivate sudo mode, simply run\n'>> sudo off'",
         "help-twice": "Why are you here?",
         "other": "The command couldn't be parsed. Try typing 'help' to see the possible input commands."

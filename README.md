@@ -10,7 +10,7 @@ Python script that can be used to quickly organize rushes from a video shooting 
 ## Table of contents
 
 1. [ Installation ](#1-installation)  
-2. [ Features ](#2-features)  
+2. [ How to use ](#2-how-to-use)  
 
 ## To do
 
@@ -31,28 +31,36 @@ Python script that can be used to quickly organize rushes from a video shooting 
 
 To use this tool, type in a shell:
 ```bash
->> cd location_of_cli
+>> cd path/to/video-logging
 >> pip install -r requirements
 >> python cli.py
 ```
 
 Don't hesitate to use the `help` command to understand the different functions of the tool.
 
-## 2. Features
+## 2. How to use
 
-To naviguate trough directories, you can use the `>> cd` command.
+With this tool, you can navigate trough directories using the `>> cd` command. For instance, if you're in the `C:\Users\Foo` directory, you can type
+```bash
+>> cd bar
+```
+and you will be in the `C:\Users\Foo\bar` directory. To go back in the directories structure, you can use `>> cd ..`. Navigate like this to the folder you would like to sort.
 
-To sort files by extension, type:
+Once you are in the right folder, you can realize multiple operations, such as:
+
+- sorting files by their extension, using:
 ```bash
 >> folder
 ```
-
-To trash the videos of length shorter than `time_limit`, type:
+- trashing the videos of length shorter than a certain value, getting rid of the useless ones, using:
 ```bash
 >> trash <time_limit>
 ```
-
-To sort files by date, type:
+where `time_limit` is a positive integer;
+- sorting files by date, using:
 ```bash
 >> date
 ```
+The folders will be in the form of `YYMMDD-Day`.
+
+If you are lost, you can always type `>> help`, or even `>> help <command>` for help on a specific command among the previously evoked ones.
