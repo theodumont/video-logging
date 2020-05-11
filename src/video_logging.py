@@ -15,12 +15,12 @@ from progress.bar import Bar, IncrementalBar
 
 
 
-def folder_sort(EXTENSIONS):
+def folder_sort(EXTENSIONS, sudo):
     r"""Sort the files into directories according to their extension.
 
     Create the extensions directories if they don't exist.
     """
-    check_parent()
+    check_parent(sudo)
     n = get_number_files(EXTENSIONS)
     bar = IncrementalBar("Sorting files...", max=n)
 
@@ -46,7 +46,7 @@ def folder_sort(EXTENSIONS):
     print("Files sorted by type.")
 
 
-def trash_videos(time_limit, EXTENSIONS):
+def trash_videos(time_limit, EXTENSIONS, sudo):
     r"""Trash the videos that are shorter than time_limit to get rid of
     the shooting errors.
 
@@ -76,7 +76,7 @@ def trash_videos(time_limit, EXTENSIONS):
             return True
         return False
 
-    check_parent()
+    check_parent(sudo)
     n = get_number_files(EXTENSIONS, directory='Videos')
     bar = IncrementalBar(f"Trashing videos of duration <= {time_limit}s...", max=n)
 
@@ -96,12 +96,12 @@ def trash_videos(time_limit, EXTENSIONS):
     print(f"{nb_trashed} video{term} trashed.")
 
 
-def sort_by_date():
+def sort_by_date(sudo):
     r"""Sort files in directories by creation date.
 
     The repositories will be in the form of 'YYMMDD-Day'.
     """
-    check_parent()
+    check_parent(sudo)
     n = len(os.listdir())
     bar = IncrementalBar(f"Sorting files by date...", max=n)
     for file in os.listdir():
@@ -134,17 +134,20 @@ def move_to_dir(file, directory):
     os.rename(file, os.path.join(directory, file))
 
 
-def check_parent():
+def check_parent(sudo):
     """
     Check if 'video-logging' scripts are in cwd.
     """
-    for root, dirs, files in os.walk("./"):
-        if ".videolog" in files:
-            raise OSError(
-                "! Warning: the current directory contains the 'video-logging' scripts.\n"
-                "! Moving files may do bad things.\n"
-                "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
-            )
+    if not sudo:
+        for root, dirs, files in os.walk("./"):
+            if ".videolog" in files:
+                raise OSError(
+                    "! Warning: the current directory contains the 'video-logging' scripts.\n"
+                    "! Moving files may do bad things.\n"
+                    "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
+                )
+    else:
+        pass
 
 
 def get_number_files(EXTENSIONS, directory='all'):

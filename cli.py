@@ -102,7 +102,7 @@ class CLI(object):
         """
         When the 'folder' command is read.
         """
-        log.folder_sort(self.EXTENSIONS)
+        log.folder_sort(self.EXTENSIONS, self.sudo)
 
     def process_trash(self, split_command, cursor):
         """
@@ -122,7 +122,7 @@ class CLI(object):
                 if int_time_limit <= 0:
                     self.print_error(f"Negative (zero included) values are not valid. Please input a positive integer.")
                 else:
-                    log.trash_videos(int_time_limit, self.EXTENSIONS)
+                    log.trash_videos(int_time_limit, self.EXTENSIONS, self.sudo)
             except ValueError as e:
                 self.print_error(f"Could not parse '{time_limit}' as a positive int. Please input a positive integer.")
 
@@ -130,7 +130,7 @@ class CLI(object):
         """
         When the 'date' command is read.
         """
-        log.sort_by_date()
+        log.sort_by_date(self.sudo)
 
     def process_sudo(self, split_command, cursor):
         """
