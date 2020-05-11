@@ -78,7 +78,6 @@ def trash_videos(time_limit, EXTENSIONS):
 
     check_parent()
     n = get_number_files(EXTENSIONS, directory='Videos')
-    print(n)
     bar = IncrementalBar(f"Trashing videos of duration <= {time_limit}s...", max=n)
 
     nb_trashed = 0
@@ -94,7 +93,7 @@ def trash_videos(time_limit, EXTENSIONS):
 
     bar.finish()
     term = 's' * (nb_trashed >= 2)
-    print(f"{nb_trashed} file{term} trashed.")
+    print(f"{nb_trashed} video{term} trashed.")
 
 
 def sort_by_date():
@@ -114,7 +113,7 @@ def sort_by_date():
         bar.next()
 
     bar.finish()
-    print("Videos sorted by date.")
+    print("Files sorted by date.")
 
 
 def move_to_dir(file, directory):

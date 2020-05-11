@@ -58,7 +58,7 @@ If you are lost, you can always type `>> help`, or even `>> help <command>` for 
 
 - [x] Store help messages in separate file
     - Find right structure of dict
-- [x] Find a cleaner way to get EXTENSIONS
+- [x] Find a cleaner way to get `EXTENSIONS`
 - [ ] Add renaming option
 - [ ] Issue when space in name of file
 - [ ] Issue when more than two consecutive spaces in name of file
@@ -68,3 +68,5 @@ If you are lost, you can always type `>> help`, or even `>> help <command>` for 
     - [ ] Use custom exception
 - [x] Add color in terminal ?
 - [ ] Notify when folder empty
+- [ ] Problem in count when only folders in directory
+- [ ] Add possibility to choose extension type of files to sort with `date`
