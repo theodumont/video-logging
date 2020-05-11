@@ -193,6 +193,13 @@ class CLI(object):
             else:
                 print(HELP["other"])
 
+    def print_header(self):
+        """
+        Print header.
+        """
+        print("\n".join(self.HEADER))
+
+
     def print_dir(self):
         """
         Print the input headline.
@@ -222,7 +229,7 @@ if __name__ == '__main__':
         data = json.load(file)
     cli = CLI(data)
 
-    print("\n".join(cli.HEADER))
+    cli.print_header()
 
     while True:
         try:

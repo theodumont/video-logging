@@ -39,10 +39,10 @@
         "other": "The command couldn't be parsed. Try typing 'help' to see the possible input commands."
     },
     "HEADER": [
-        "\n",
-        "==============================================================================",
-        "  This tool was designed by Theo Dumont and all the source code is available  ",
-        "   at https://github.com/theodumont/video-logging under the GPL 3 License.    ",
-        "=============================================================================="
+        "===============================================",
+        "           VIDEO LOGGING AUTOMATION            ",
+        "  https://github.com/theodumont/video-logging  ",
+        "               (GPL 3 License)                 ",
+        "==============================================="
     ]
 }
