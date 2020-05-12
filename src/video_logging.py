@@ -3,7 +3,6 @@
 
 Makes the process of cleaning a folder easier and simplifies the
 video logging process.
-
 """
 
 import os
@@ -16,9 +15,15 @@ from progress.bar import Bar, IncrementalBar
 
 
 def folder_sort(EXTENSIONS, sudo):
-    r"""Sort the files into directories according to their extension.
-
+    """Sort the files into directories according to their extension.
     Create the extensions directories if they don't exist.
+
+    Parameters
+    ----------
+    EXTENSIONS : dict
+        Contains the lists of extensions for each type of file.
+    sudo : bool
+        Sudo mode is activated or not.
     """
     check_parent(sudo)
     n = get_number_files(EXTENSIONS)
@@ -47,16 +52,20 @@ def folder_sort(EXTENSIONS, sudo):
 
 
 def trash_videos(time_limit, EXTENSIONS, sudo):
-    r"""Trash the videos that are shorter than time_limit to get rid of
+    """Trash the videos that are shorter than time_limit to get rid of
     the shooting errors.
 
     Parameters
     ----------
     time_limit : int
         Duration limit.
+    EXTENSIONS : dict
+        Contains the lists of extensions for each type of file.
+    sudo : bool
+        Sudo mode is activated or not.
     """
     def move_to_trash(file, duration):
-        r"""Move a video to trash if it is too short.
+        """Move a video to trash if it is too short.
 
         Check if a directory named `Trash` exists in current directory. If not,
         create it. Then, move `file` in `Trash` if `duration` is smaller than
@@ -97,9 +106,13 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
 
 
 def sort_by_date(sudo):
-    r"""Sort files in directories by creation date.
+    """Sort files in directories by creation date.
+    Repositories will be in the form of 'YYMMDD-Day'.
 
-    The repositories will be in the form of 'YYMMDD-Day'.
+    Parameters
+    ----------
+    sudo : bool
+        Sudo mode is activated or not.
     """
     check_parent(sudo)
     n = len(os.listdir())
@@ -117,8 +130,7 @@ def sort_by_date(sudo):
 
 
 def move_to_dir(file, directory):
-    r"""Move file to directory.
-
+    """Move file to directory.
     Check if a directory named `directory` exists in current directory. If not,
     create it. Then, move `file` in `directory`.
 
@@ -135,8 +147,13 @@ def move_to_dir(file, directory):
 
 
 def check_parent(sudo):
-    """
-    Check if 'video-logging' scripts are in cwd.
+    """Check if 'video-logging' scripts are in cwd to prevent bad things
+    from happening.
+
+    Parameters
+    ----------
+    sudo : bool
+        Sudo mode is activated or not.
     """
     if not sudo:
         for root, dirs, files in os.walk("./"):
@@ -147,14 +164,21 @@ def check_parent(sudo):
                     "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
                 )
     else:
+        # maybe print a message here
         pass
 
 
 def get_number_files(EXTENSIONS, directory='all'):
+    """Return number of file of a certain type in cwd.
+
+    Parameters
+    ----------
+    EXTENSIONS : dict
+        Contains the lists of extensions for each type of file.
+    directory : string
+        Target directory.
     """
-    Return number of file of a certain type in cwd.
-    """
-    if directory == 'all':
+    if directory == 'all':  # all the files
         return len(os.listdir())
     count = 0
     for file in os.listdir():

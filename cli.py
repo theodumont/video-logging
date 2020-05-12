@@ -29,7 +29,7 @@ class CLI(object):
         self.help_list = ["help", "h", "?", "what", "how"]
         self.sudo_list = ["sudo"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
-        # folder to clean
+        # current folder
         self.folder = os.getcwd()
         # sudo mode
         self.sudo = False
@@ -240,6 +240,6 @@ if __name__ == '__main__':
         except OSError as e:
             cli.print_warning(str(e))
         except (EOFError, KeyboardInterrupt):
-            print("exit")  # In order to avoid ugly output
+            print("exit")  # in order to avoid ugly output
             cli.exit()
             break
