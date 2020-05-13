@@ -48,7 +48,7 @@ def folder_sort(EXTENSIONS, sudo):
                 move_to_dir(file, 'Other')
         bar.next()
     bar.finish()
-    print("Files sorted by type.")
+    return "Files sorted by type."
 
 
 def trash_videos(time_limit, EXTENSIONS, sudo):
@@ -102,7 +102,7 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
 
     bar.finish()
     term = 's' * (nb_trashed >= 2)
-    print(f"{nb_trashed} video{term} trashed.")
+    return f"{nb_trashed} video{term} trashed."
 
 
 def sort_by_date(sudo):
@@ -126,7 +126,7 @@ def sort_by_date(sudo):
         bar.next()
 
     bar.finish()
-    print("Files sorted by date.")
+    return "Files sorted by date."
 
 
 def move_to_dir(file, directory):
@@ -158,7 +158,7 @@ def check_parent(sudo):
     if not sudo:
         for root, dirs, files in os.walk("./"):
             if ".videolog" in files:
-                raise OSError(
+                raise SudoException(
                     "! Warning: the current directory contains the 'video-logging' scripts.\n"
                     "! Moving files may do bad things.\n"
                     "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
@@ -186,3 +186,7 @@ def get_number_files(EXTENSIONS, directory='all'):
         if extension in EXTENSIONS[directory]:
             count += 1
     return count
+
+
+class SudoException(Exception):
+    pass

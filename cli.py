@@ -8,6 +8,7 @@ import sys
 import json
 import src.video_logging as log
 from termcolor import cprint, colored
+from src.video_logging import SudoException
 
 
 class CLI(object):
@@ -69,7 +70,7 @@ class CLI(object):
         elif instruction.lower() in self.exit_list:
             self.exit()
         else:
-            self.print_error(f"The input command {command} could not be parsed, because the tool did not understand the term '{instruction}'. If you wish to you can use :\n'>> help'\nThat instruction will bring a list of the available instruction and their use cases.")
+            print(err(f"The input command {command} could not be parsed, because the tool did not understand the term '{instruction}'. If you wish to you can use :\n'>> help'\nThat instruction will bring a list of the available instruction and their use cases."))
 
     def exit(self):
         """
@@ -84,10 +85,10 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            self.print_warning(
+            print(warning(
                 "The syntax to change directory is:\n"
                 "'>> cd <directory>'"
-            )
+            ))
         else:
             directory = split_command[cursor]
             cursor += 1
@@ -96,13 +97,13 @@ class CLI(object):
                 self.folder = os.getcwd()
                 # display(self)
             except FileNotFoundError as e:
-                self.print_error(f"Cannot find the '{directory}' directory.")
+                print(err(f"Cannot find the '{directory}' directory."))
 
     def process_folder(self):
         """
         When the 'folder' command is read.
         """
-        log.folder_sort(self.EXTENSIONS, self.sudo)
+        print(info(log.folder_sort(self.EXTENSIONS, self.sudo)))
 
     def process_trash(self, split_command, cursor):
         """
@@ -110,27 +111,27 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            self.print_warning(
+            print(warning(
                 "The syntax to choose the time limit is:\n"
                 "'>> trash <time limit>'"
-            )
+            ))
         else:
             time_limit = split_command[cursor]
             cursor += 1
             try:
                 int_time_limit = int(time_limit)
                 if int_time_limit <= 0:
-                    self.print_error(f"Negative (zero included) values are not valid. Please input a positive integer.")
+                    print(err(f"Negative (zero included) values are not valid. Please input a positive integer."))
                 else:
-                    log.trash_videos(int_time_limit, self.EXTENSIONS, self.sudo)
+                    print(info(log.trash_videos(int_time_limit, self.EXTENSIONS, self.sudo)))
             except ValueError as e:
-                self.print_error(f"Could not parse '{time_limit}' as a positive int. Please input a positive integer.")
+                print(err(f"Could not parse '{time_limit}' as a positive int. Please input a positive integer."))
 
     def process_date(self):
         """
         When the 'date' command is read.
         """
-        log.sort_by_date(self.sudo)
+        print(info(log.sort_by_date(self.sudo)))
 
     def process_sudo(self, split_command, cursor):
         """
@@ -138,30 +139,30 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            self.print_warning(
+            print(warning(
                 "The syntax to change sudo mode is:\n"
                 "'>> sudo off'"
-            )
+            ))
         else:
             mode = split_command[cursor]
             cursor += 1
             if mode.lower() == "on":
                 self.sudo = True
-                self.print_warning(
+                print(warning(
                     "! Warning: sudo mode activated. The tool will not check if the current directory contains the 'video-logging' scripts anymore.\n"
                     "! Moving files may do bad things.\n"
                     "! You can turn the sudo mode back off using:\n"
                     "'>> sudo off'"
-                )
+                ))
             elif mode.lower() == "off":
                 self.sudo = False
-                self.print_warning(
+                print(warning(
                     "sudo mode deactivated."
-                )
+                ))
             else:
-                self.print_error(
+                print(err(
                     "The possible values for sudo mode are 'on' and 'off'."
-                )
+                ))
 
     def process_help(self, split_command, cursor, EXTENSIONS, HELP):
         """
@@ -200,27 +201,38 @@ class CLI(object):
         print("\n".join(self.HEADER))
 
 
-    def print_dir(self):
+    def pretty_dir(self):
         """
-        Print the input headline.
+        Return the input headline.
         """
-        prefix = colored("(sudo) ", "yellow") * self.sudo
-        suffix = colored(self.folder + ">", "cyan")
-        print(f"{prefix}{suffix}")
+        prefix = warning("(sudo) ") * self.sudo
+        suffix = dir_style(self.folder + ">")
+        return f"{prefix}{suffix}"
 
 
-    def print_error(self, string):
-        """
-        Print an error.
-        """
-        cprint(string, 'red', file=sys.stderr)
+def err(text):
+    """
+    Create a pretty error String from text.
+    """
+    return f"\033[91m{text}\033[m"
 
-    def print_warning(self, string):
-        """
-        Print a warning.
-        """
-        cprint(string, 'yellow', file=sys.stderr)
+def warning(text):
+    """
+    Create a pretty warning String from text.
+    """
+    return f"\033[93m{text}\033[m"
 
+def info(text):
+    """
+    Create a pretty informative String from text.
+    """
+    return f"\033[92m{text}\033[m"
+
+def dir_style(text):
+    """
+    Create a pretty directory String from text.
+    """
+    return f"\033[94m{text}\033[m"
 
 
 if __name__ == '__main__':
@@ -234,11 +246,13 @@ if __name__ == '__main__':
     while True:
         try:
             print()
-            cli.print_dir()
-            command = input(colored(">> ", "cyan"))
+            print(cli.pretty_dir())
+            command = input(dir_style(">> "))
             cli.read_command(command)
+        except SudoException as e:
+            print(warning(str(e)))
         except OSError as e:
-            cli.print_warning(str(e))
+            print(error(str(e)))
         except (EOFError, KeyboardInterrupt):
             print("exit")  # in order to avoid ugly output
             cli.exit()
