@@ -9,8 +9,9 @@ Python script that can be used to quickly organize rushes from a video shooting 
 
 ## Table of contents
 
-1. [ Installation ](#1-installation)  
-2. [ How to use ](#2-how-to-use)  
+1. [ Installation ](#1-installation)
+2. [ How to use ](#2-how-to-use)
+3. [ Customize ](#3-customize)
 
 ## 1. Installation
 
@@ -53,6 +54,12 @@ where `time_limit` is a positive integer;
 The folders will be in the form of `YYMMDD-Day`.
 
 If you are lost, you can always type `>> help`, or even `>> help <command>` for help on a specific command among the previously evoked ones.
+
+## 3. Customize
+
+By default, the folders are named `Documents`, `Audio`, `Videos`... But you can change this. In order to do so, just go to `src\data.json` and change the `EXTENSIONS` variable. You can also choose which extension corresponds to which folder by changing the list.
+
+
 
 ## To do
 
