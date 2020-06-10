@@ -50,7 +50,7 @@ class CLI(object):
         cursor += 1
 
         if instruction.lower() in self.cd_list:
-            self.process_change_dir(split_command, cursor)
+            self.process_change_dir(command, split_command, cursor)
 
         elif instruction.lower() in self.folder_list:
             self.process_folder()
@@ -79,7 +79,7 @@ class CLI(object):
         print("Leaving the tool...\n")
         sys.exit(0)
 
-    def process_change_dir(self, split_command, cursor):
+    def process_change_dir(self, command, split_command, cursor):
         """
         When the 'cd' command is read.
         """
@@ -90,7 +90,17 @@ class CLI(object):
                 "'>> cd <directory>'"
             ))
         else:
-            directory = split_command[cursor]
+            # get target directory with spaces
+            # we cannot use split_command for that because it does not take spaces
+            # into account
+            # remove command word
+            command = command.split(' ', 1)[1]
+            # remove spaces at the beginning
+            nb_spaces = 0
+            while command[nb_spaces] == ' ':
+                nb_spaces += 1
+            directory = command[nb_spaces:]
+
             cursor += 1
             try:
                 os.chdir(directory)

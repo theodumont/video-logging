@@ -67,8 +67,8 @@ By default, the folders are named `Documents`, `Audio`, `Videos`... But you can 
     - Find right structure of dict
 - [x] Find a cleaner way to get `EXTENSIONS`
 - [ ] Add renaming option
-- [ ] Issue when space in name of file
-- [ ] Issue when more than two consecutive spaces in name of file
+- [x] Issue when space in name of file
+- [x] Issue when more than two consecutive spaces in name of file
 - [x] Add progress bar
 - [x] Add warning when sorting folder where `video-logging` is
     - [x] Add possibility to choose sudo mode (don't check)
