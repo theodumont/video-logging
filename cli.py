@@ -8,7 +8,7 @@ import sys
 import json
 import src.video_logging as log
 from termcolor import cprint, colored
-from src.video_logging import SudoException
+from src.video_logging import SudoException, EmptyFolder
 
 
 class CLI(object):
@@ -90,8 +90,7 @@ class CLI(object):
                 "'>> cd <directory>'"
             ))
         else:
-            # get target directory with spaces
-            # we cannot use split_command for that because it does not take spaces
+            # we cannot use split_command here because it does not take spaces
             # into account
             # remove command word
             command = command.split(' ', 1)[1]
@@ -259,6 +258,8 @@ if __name__ == '__main__':
             print(cli.pretty_dir())
             command = input(dir_style(">> "))
             cli.read_command(command)
+        except EmptyFolder as e:
+            print(info(str(e)))
         except SudoException as e:
             print(warning(str(e)))
         except OSError as e:

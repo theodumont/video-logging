@@ -27,6 +27,10 @@ def folder_sort(EXTENSIONS, sudo):
     """
     check_parent(sudo)
     n = get_number_files(EXTENSIONS)
+    if n == 0:
+        raise EmptyFolder(
+            "Nothing to do here, this folder is empty."
+        )
     bar = IncrementalBar("Sorting files...", max=n)
 
     for file in os.listdir():
@@ -87,6 +91,10 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
 
     check_parent(sudo)
     n = get_number_files(EXTENSIONS, directory='Videos')
+    if n == 0:
+        raise EmptyFolder(
+            "Nothing to do here, this folder does not countain any video."
+        )
     bar = IncrementalBar(f"Trashing videos of duration <= {time_limit}s...", max=n)
 
     nb_trashed = 0
@@ -116,6 +124,10 @@ def sort_by_date(sudo):
     """
     check_parent(sudo)
     n = len(os.listdir())
+    if n == 0:
+        raise EmptyFolder(
+            "Nothing to do here, this folder is empty."
+        )
     bar = IncrementalBar(f"Sorting files by date...", max=n)
     for file in os.listdir():
         if not os.path.isdir(file):
@@ -189,4 +201,7 @@ def get_number_files(EXTENSIONS, directory='all'):
 
 
 class SudoException(Exception):
+    pass
+
+class EmptyFolder(Exception):
     pass

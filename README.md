@@ -74,7 +74,7 @@ By default, the folders are named `Documents`, `Audio`, `Videos`... But you can 
     - [x] Add possibility to choose sudo mode (don't check)
     - [ ] Use custom exception
 - [x] Add color in terminal ?
-- [ ] Notify when folder empty
+- [x] Notify when folder empty
 - [ ] Problem in count when only folders in directory
 - [ ] Add possibility to choose extension type of files to sort with `date`
 - [ ] Add other platforms support
