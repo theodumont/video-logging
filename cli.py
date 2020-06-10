@@ -59,7 +59,7 @@ class CLI(object):
             self.process_trash(split_command, cursor)
 
         elif instruction.lower() in self.date_list:
-            self.process_date()
+            self.process_date(split_command, cursor)
 
         elif instruction.lower() in self.help_list:
             self.process_help(split_command, cursor, self.EXTENSIONS, self.HELP)
@@ -136,11 +136,20 @@ class CLI(object):
             except ValueError as e:
                 print(err(f"Could not parse '{time_limit}' as a positive int. Please input a positive integer."))
 
-    def process_date(self):
+    def process_date(self, split_command, cursor):
         """
         When the 'date' command is read.
         """
-        print(info(log.sort_by_date(self.sudo)))
+        if len(split_command) == cursor:
+            # i.e. we have no more arguments available
+            print(info(log.sort_by_date(self.EXTENSIONS, self.sudo)))
+        else:
+            directory = split_command[cursor]
+            cursor += 1
+            if directory not in self.EXTENSIONS:
+                print(err(f"{directory} is not a valid directory. Please input a valid directory."))
+            else:
+                print(info(log.sort_by_date(self.EXTENSIONS, self.sudo, directory)))
 
     def process_sudo(self, split_command, cursor):
         """

@@ -76,5 +76,5 @@ By default, the folders are named `Documents`, `Audio`, `Videos`... But you can 
 - [x] Add color in terminal ?
 - [x] Notify when folder empty
 - [ ] Problem in count when only folders in directory
-- [ ] Add possibility to choose extension type of files to sort with `date`
+- [x] Add possibility to choose extension type of files to sort with `date`
 - [ ] Add other platforms support

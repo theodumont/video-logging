@@ -35,21 +35,7 @@ def folder_sort(EXTENSIONS, sudo):
 
     for file in os.listdir():
         time.sleep(.001)
-        name, extension = os.path.splitext(file)
-        if os.path.isdir(file):
-            if name not in EXTENSIONS:
-                move_to_dir(file, 'Folders')
-            else:
-                pass
-        else:
-            treated = False
-            for directory in EXTENSIONS:
-                if extension in EXTENSIONS[directory]:
-                    move_to_dir(file, directory)
-                    treated = True
-                    break
-            if not treated:
-                move_to_dir(file, 'Other')
+        move_to_dir(file, get_folder_from_extension(file, EXTENSIONS))
         bar.next()
     bar.finish()
     return "Files sorted by type."
@@ -113,24 +99,34 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
     return f"{nb_trashed} video{term} trashed."
 
 
-def sort_by_date(sudo):
+def sort_by_date(EXTENSIONS, sudo, directory=None):
     """Sort files in directories by creation date.
     Repositories will be in the form of 'YYMMDD-Day'.
 
     Parameters
     ----------
+    directory : string
+        Type of files to move. If None, all the files are moved.
+    EXTENSIONS : dict
+        Contains the lists of extensions for each type of file.
     sudo : bool
         Sudo mode is activated or not.
     """
     check_parent(sudo)
-    n = len(os.listdir())
+    n = get_number_files(EXTENSIONS, directory)
     if n == 0:
-        raise EmptyFolder(
-            "Nothing to do here, this folder is empty."
-        )
+        if directory:
+            raise EmptyFolder(
+                    f"Nothing to do here, this folder does not contain any element of the type '{directory}'."
+                )
+        else:
+            raise EmptyFolder(
+                "Nothing to do here, this folder is empty."
+            )
     bar = IncrementalBar(f"Sorting files by date...", max=n)
     for file in os.listdir():
-        if not os.path.isdir(file):
+        extension = os.path.splitext(file)[1]
+        if not os.path.isdir(file) and directory and extension in EXTENSIONS[directory]:
             time.sleep(.001)
             creation = time.localtime(os.path.getmtime(file))
             directory = time.strftime('%y%m%d-%a', creation)
@@ -153,9 +149,10 @@ def move_to_dir(file, directory):
     directory : string
         Target directory.
     """
-    if not os.path.isdir(directory):
-        os.mkdir('./{}'.format(directory))
-    os.rename(file, os.path.join(directory, file))
+    if directory:
+        if not os.path.isdir(directory):
+            os.mkdir('./{}'.format(directory))
+        os.rename(file, os.path.join(directory, file))
 
 
 def check_parent(sudo):
@@ -180,7 +177,7 @@ def check_parent(sudo):
         pass
 
 
-def get_number_files(EXTENSIONS, directory='all'):
+def get_number_files(EXTENSIONS, directory=None):
     """Return number of file of a certain type in cwd.
 
     Parameters
@@ -188,17 +185,32 @@ def get_number_files(EXTENSIONS, directory='all'):
     EXTENSIONS : dict
         Contains the lists of extensions for each type of file.
     directory : string
-        Target directory.
+        Target directory. If None, return total number of files.
     """
-    if directory == 'all':  # all the files
+    if not directory:  # all the files
         return len(os.listdir())
     count = 0
     for file in os.listdir():
+        print(file)
         extension = os.path.splitext(file)[1]
         if extension in EXTENSIONS[directory]:
             count += 1
+    print(count)
     return count
 
+
+def get_folder_from_extension(file, EXTENSIONS):
+    name, extension = os.path.splitext(file)
+    if os.path.isdir(file):
+        if name not in EXTENSIONS:
+            return 'Folders'
+        else:
+            return None
+    else:
+        for directory in EXTENSIONS:
+            if extension in EXTENSIONS[directory]:
+                return directory
+        return 'Other'
 
 class SudoException(Exception):
     pass
