@@ -167,11 +167,7 @@ def check_parent(sudo):
     if not sudo:
         for root, dirs, files in os.walk("./"):
             if ".videolog" in files:
-                raise SudoException(
-                    "! Warning: the current directory contains the 'video-logging' scripts.\n"
-                    "! Moving files may do bad things.\n"
-                    "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
-                )
+                raise SudoException()
     else:
         # maybe print a message here
         pass

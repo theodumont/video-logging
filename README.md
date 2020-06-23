@@ -72,9 +72,9 @@ By default, the folders are named `Documents`, `Audio`, `Videos`... But you can 
 - [x] Add progress bar
 - [x] Add warning when sorting folder where `video-logging` is
     - [x] Add possibility to choose sudo mode (don't check)
-    - [ ] Use custom exception
+    - [x] Use custom exception
 - [x] Add color in terminal ?
 - [x] Notify when folder empty
-- [ ] Problem in count when only folders in directory
+- [x] Problem in count when only folders in directory
 - [x] Add possibility to choose extension type of files to sort with `date`
 - [ ] Add other platforms support

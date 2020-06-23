@@ -15,9 +15,7 @@ class CLI(object):
     """CLI for the video_logging module."""
 
     def __init__(self, data):
-        """
-        Class constructor.
-        """
+        """Class constructor."""
         # data files
         self.EXTENSIONS = data["EXTENSIONS"]
         self.HELP = data["HELP"]
@@ -255,10 +253,10 @@ if __name__ == '__main__':
         except EmptyFolder as e:
             print(info(str(e)))
         except SudoException as e:
-            print(warning(str(e)))
+            print(warning(cli.WARNINGS["sudo-exception"]))
         except OSError as e:
             print(error(str(e)))
         except (EOFError, KeyboardInterrupt):
-            print("exit")  # in order to avoid ugly output
+            print("exit")  # to avoid ugly output
             cli.exit()
             break

@@ -48,12 +48,17 @@
             "! You can turn the sudo mode back off using:\n",
             "'>> sudo off'"
         ],
-        "sudo-off": "sudo mode deactivated."
+        "sudo-off": "sudo mode deactivated.",
+        "sudo-exception": [
+            "! Warning: the current directory contains the 'video-logging' scripts.\n",
+            "! Moving files may do bad things.\n",
+            "! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command."
+        ]
     },
     "HEADER": [
         "===============================================",
         "           VIDEO LOGGING AUTOMATION            ",
-        "       (or how to win a minute in a day)       ",
+        "        (and folder sorting and stuff)         ",
         "==============================================="
     ]
 }
