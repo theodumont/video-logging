@@ -21,6 +21,7 @@ class CLI(object):
         # data files
         self.EXTENSIONS = data["EXTENSIONS"]
         self.HELP = data["HELP"]
+        self.WARNINGS = data["WARNINGS"]
         self.HEADER = data["HEADER"]
         # list of all parameters accepted to trigger the different modes.
         self.cd_list = ["cd", "c", "go"]
@@ -85,10 +86,7 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            print(warning(
-                "The syntax to change directory is:\n"
-                "'>> cd <directory>'"
-            ))
+            print(warning(self.WARNINGS["syntax-dir"]))
         else:
             # we cannot use split_command here because it does not take spaces
             # into account
@@ -120,10 +118,7 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            print(warning(
-                "The syntax to choose the time limit is:\n"
-                "'>> trash <time limit>'"
-            ))
+            print(warning(self.WARNINGS["syntax-time"]))
         else:
             time_limit = split_command[cursor]
             cursor += 1
@@ -157,26 +152,16 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            print(warning(
-                "The syntax to change sudo mode is:\n"
-                "'>> sudo off'"
-            ))
+            print(warning(self.WARNINGS["syntax-sudo"]))
         else:
             mode = split_command[cursor]
             cursor += 1
             if mode.lower() == "on":
                 self.sudo = True
-                print(warning(
-                    "! Warning: sudo mode activated. The tool will not check if the current directory contains the 'video-logging' scripts anymore.\n"
-                    "! Moving files may do bad things.\n"
-                    "! You can turn the sudo mode back off using:\n"
-                    "'>> sudo off'"
-                ))
+                print(warning(self.WARNINGS["sudo-on"]))
             elif mode.lower() == "off":
                 self.sudo = False
-                print(warning(
-                    "sudo mode deactivated."
-                ))
+                print(warning(self.WARNINGS["sudo-off"]))
             else:
                 print(err(
                     "The possible values for sudo mode are 'on' and 'off'."
@@ -232,25 +217,25 @@ def err(text):
     """
     Create a pretty error String from text.
     """
-    return f"\033[91m{text}\033[m"
+    return f"\033[91m{''.join(text)}\033[m"
 
 def warning(text):
     """
     Create a pretty warning String from text.
     """
-    return f"\033[93m{text}\033[m"
+    return f"\033[93m{''.join(text)}\033[m"
 
 def info(text):
     """
     Create a pretty informative String from text.
     """
-    return f"\033[92m{text}\033[m"
+    return f"\033[92m{''.join(text)}\033[m"
 
 def dir_style(text):
     """
     Create a pretty directory String from text.
     """
-    return f"\033[94m{text}\033[m"
+    return f"\033[94m{''.join(text)}\033[m"
 
 
 if __name__ == '__main__':

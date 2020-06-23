@@ -38,6 +38,18 @@
         "help-twice": "Why are you here?",
         "other": "The command couldn't be parsed. Try typing 'help' to see the possible input commands."
     },
+    "WARNINGS": {
+        "syntax-dir": "The syntax to change directory is:\n'>> cd <directory>'",
+        "syntax-time": "The syntax to choose the time limit is:\n'>> trash <time limit>'",
+        "syntax-sudo": "The syntax to change sudo mode is:\n'>> sudo off'",
+        "sudo-on": [
+            "! Warning: sudo mode activated. The tool will not check if the current directory contains the 'video-logging' scripts anymore.\n",
+            "! Moving files may do bad things.\n",
+            "! You can turn the sudo mode back off using:\n",
+            "'>> sudo off'"
+        ],
+        "sudo-off": "sudo mode deactivated."
+    },
     "HEADER": [
         "===============================================",
         "           VIDEO LOGGING AUTOMATION            ",
