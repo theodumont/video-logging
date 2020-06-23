@@ -4,6 +4,7 @@ CLI for the video_logging.py module.
 """
 
 import os
+import platform
 import sys
 import json
 import src.video_logging as log
@@ -237,7 +238,14 @@ def dir_style(text):
 
 
 if __name__ == '__main__':
-    os.system('cls')
+    platform = platform.system()
+    if platform == "Windows":
+        os.system('cls')
+    elif platform == "Linux":
+        os.system('clear')
+    else:
+        sys.exit(f"Your platform ({platform}) isn't supported yet...")
+
     with open('src/data.json', 'r') as file:
         data = json.load(file)
     cli = CLI(data)

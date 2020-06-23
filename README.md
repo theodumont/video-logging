@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/github/license/theodumont/video-logging)](https://github.com/theodumont/video-logging/blob/master/LICENSE)
 ![Windows Support](https://img.shields.io/badge/Windows-Support-brightgreen.svg)
+![Linux Support](https://img.shields.io/badge/Linux-Support-brightgreen.svg)
 
 # Video logging for editing
 
@@ -63,18 +64,8 @@ By default, the folders are named `Documents`, `Audio`, `Videos`... But you can 
 
 ## To do
 
-- [x] Store help messages in separate file
-    - Find right structure of dict
-- [x] Find a cleaner way to get `EXTENSIONS`
 - [ ] Add renaming option
-- [x] Issue when space in name of file
-- [x] Issue when more than two consecutive spaces in name of file
 - [x] Add progress bar
 - [x] Add warning when sorting folder where `video-logging` is
-    - [x] Add possibility to choose sudo mode (don't check)
-    - [x] Use custom exception
-- [x] Add color in terminal ?
 - [x] Notify when folder empty
-- [x] Problem in count when only folders in directory
-- [x] Add possibility to choose extension type of files to sort with `date`
-- [ ] Add other platforms support
+- [x] Add other platforms support
