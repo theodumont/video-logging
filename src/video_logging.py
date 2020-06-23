@@ -200,6 +200,15 @@ def get_number_files(EXTENSIONS, directory=None):
 
 
 def get_folder_from_extension(file, EXTENSIONS):
+    """Return the folder corresponding to an extension.
+
+    Parameters
+    ----------
+    file : string
+        File whose extension is targetted.
+    EXTENSIONS : dict
+        Contains the lists of extensions for each type of file.
+    """
     name, extension = os.path.splitext(file)
     if os.path.isdir(file):
         if name not in EXTENSIONS:
