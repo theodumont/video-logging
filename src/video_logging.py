@@ -123,18 +123,19 @@ def sort_by_date(EXTENSIONS, sudo, directory=None):
             raise EmptyFolder(
                 "Nothing to do here, this folder is empty."
             )
-    bar = IncrementalBar(f"Sorting {directory.lower()} by date...", max=n)
+    bar = IncrementalBar(f"Sorting files by date...", max=n)
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
-        if directory and extension in EXTENSIONS[directory]:
+        if not directory or extension in EXTENSIONS[directory]:
             if not os.path.isdir(file):
                 creation = time.localtime(os.path.getmtime(file))
                 destination_directory = time.strftime('%y%m%d-%a', creation)
                 move_to_dir(file, destination_directory)
-            bar.next()
+
+                bar.next()
 
     bar.finish()
-    return f"{directory} sorted by date."
+    return f"Files sorted by date."
 
 
 def move_to_dir(file, directory):
