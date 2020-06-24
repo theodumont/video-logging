@@ -34,7 +34,6 @@ def folder_sort(EXTENSIONS, sudo):
     bar = IncrementalBar("Sorting files...", max=n)
 
     for file in os.listdir():
-        time.sleep(.001)
         move_to_dir(file, get_folder_from_extension(file, EXTENSIONS))
         bar.next()
     bar.finish()
@@ -88,6 +87,7 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
         extension = os.path.splitext(file)[1]
         if extension in EXTENSIONS['Videos']:
             with VideoFileClip(file) as clip:
+                # we need to wait a little so that bad things do not happen
                 time.sleep(.001)
                 duration = clip.duration
             if move_to_trash(file, duration):
@@ -128,7 +128,6 @@ def sort_by_date(EXTENSIONS, sudo, directory=None):
         extension = os.path.splitext(file)[1]
         if directory and extension in EXTENSIONS[directory]:
             if not os.path.isdir(file):
-                time.sleep(.001)
                 creation = time.localtime(os.path.getmtime(file))
                 destination_directory = time.strftime('%y%m%d-%a', creation)
                 move_to_dir(file, destination_directory)
