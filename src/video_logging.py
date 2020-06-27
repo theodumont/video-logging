@@ -95,7 +95,7 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
             bar.next()
 
     bar.finish()
-    term = 's' * (nb_trashed >= 2)
+    term = "s" if nb_trashed >= 2 else ""
     return f"{nb_trashed} video{term} trashed."
 
 
