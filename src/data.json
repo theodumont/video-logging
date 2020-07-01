@@ -17,7 +17,7 @@
             " - cd : Changes the current directory. For more information about change, please use 'help cd'.\n",
             " - folder : Sorts the current directory files in folders. For more information about folder, please use 'help folder'.\n",
             " - trash : Trashes the useless videos. For more information about trash, please use 'help trash'.\n",
-            " - date : Sorts the current directory files in folders by date. For more information about date, pleasse use 'help date'.\n",
+            " - date : Sorts the current directory files in folders by date. For more information about date, please use 'help date'.\n",
             " - help : Brings out various help message, including this one.\n",
             " - exit : Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).\n",
             "The usual way to use the tool is to type the following successive instructions:\n",
