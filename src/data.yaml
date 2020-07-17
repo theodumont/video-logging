@@ -1,3 +1,4 @@
+# CUSTOMIZABLE PARAMETERS
 DEFAULT_PARAMETERS :
   sudo : False
   default_folder : null  # string like "C:/users/foo"
@@ -93,6 +94,8 @@ EXTENSIONS:
   - .ttf
   Other:
   - ''
+
+# HELP AND DISPLAY MESSAGES
 HELP:
   help: |
     All possible input commands are:

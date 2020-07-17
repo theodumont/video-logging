@@ -64,7 +64,7 @@ class CLI(object):
             self.process_date(split_command, cursor)
 
         elif instruction.lower() in self.help_list:
-            self.process_help(split_command, cursor, self.EXTENSIONS, self.HELP)
+            self.process_help(split_command, cursor)
 
         elif instruction.lower() in self.sudo_list:
             self.process_sudo(split_command, cursor)
@@ -168,35 +168,35 @@ class CLI(object):
                     "The possible values for sudo mode are 'on' and 'off'."
                 ))
 
-    def process_help(self, split_command, cursor, EXTENSIONS, HELP):
+    def process_help(self, split_command, cursor):
         """
         When the 'help' command is read.
         """
         if len(split_command) == cursor:
             # i.e. no more arguments to read, just printing command list.
-            print(HELP["help"])
+            print(self.HELP["help"])
         else:
             topic = split_command[cursor]
             cursor += 1
             if topic in self.exit_list:
-                print(HELP["exit"])
+                print(self.HELP["exit"])
             elif topic in self.cd_list:
-                print(HELP["cd"])
+                print(self.HELP["cd"])
             elif topic in self.folder_list:
-                print(HELP["folder"])
-                for directory in EXTENSIONS:
-                    print(f"{directory}:".ljust(11, ' ') + str(EXTENSIONS[directory]))
-                print(HELP["folder-creation"])
+                print(self.HELP["folder"])
+                for directory in self.EXTENSIONS:
+                    print(f"{directory}:".ljust(11, ' ') + str(self.EXTENSIONS[directory]))
+                print(self.HELP["folder-creation"])
             elif topic in self.trash_list:
-                print(HELP["trash"])
+                print(self.HELP["trash"])
             elif topic in self.date_list:
-                print(HELP["date"])
+                print(self.HELP["date"])
             elif topic in self.sudo_list:
-                print(HELP["sudo"])
+                print(self.HELP["sudo"])
             elif topic in self.help_list:
-                print(HELP["help-twice"])
+                print(self.HELP["help-twice"])
             else:
-                print(HELP["other"])
+                print(self.HELP["other"])
 
     def print_header(self):
         """

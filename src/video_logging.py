@@ -7,26 +7,24 @@ video logging process.
 
 import os
 import time
-import json
 import subprocess
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from progress.bar import Bar, IncrementalBar
 
 
-
-def folder_sort(EXTENSIONS, sudo):
+def folder_sort(extensions, sudo):
     """Sort the files into directories according to their extension.
     Create the extensions directories if they don't exist.
 
     Parameters
     ----------
-    EXTENSIONS : dict
+    extensions : dict
         Contains the lists of extensions for each type of file.
     sudo : bool
         Sudo mode is activated or not.
     """
     check_parent(sudo)
-    n = get_number_files(EXTENSIONS)
+    n = get_number_files(extensions)
     if n == 0:
         raise EmptyFolder(
             "Nothing to do here, this folder is empty."
@@ -34,13 +32,13 @@ def folder_sort(EXTENSIONS, sudo):
     bar = IncrementalBar("Sorting files...", max=n)
 
     for file in os.listdir():
-        move_to_dir(file, get_folder_from_extension(file, EXTENSIONS))
+        move_to_dir(file, get_folder_from_extension(file, extensions))
         bar.next()
     bar.finish()
     return "Files sorted by type."
 
 
-def trash_videos(time_limit, EXTENSIONS, sudo):
+def trash_videos(time_limit, extensions, sudo):
     """Trash the videos that are shorter than time_limit to get rid of
     the shooting errors.
 
@@ -48,7 +46,7 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
     ----------
     time_limit : int
         Duration limit.
-    EXTENSIONS : dict
+    extensions : dict
         Contains the lists of extensions for each type of file.
     sudo : bool
         Sudo mode is activated or not.
@@ -75,7 +73,7 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
         return False
 
     check_parent(sudo)
-    n = get_number_files(EXTENSIONS, directory='Videos')
+    n = get_number_files(extensions, directory='Videos')
     if n == 0:
         raise EmptyFolder(
             "Nothing to do here, this folder does not countain any video."
@@ -85,7 +83,7 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
     nb_trashed = 0
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
-        if extension in EXTENSIONS['Videos']:
+        if extension in extensions['Videos']:
             with VideoFileClip(file) as clip:
                 # we need to wait a little so that bad things do not happen
                 time.sleep(.001)
@@ -99,7 +97,7 @@ def trash_videos(time_limit, EXTENSIONS, sudo):
     return f"{nb_trashed} video{term} trashed."
 
 
-def sort_by_date(EXTENSIONS, sudo, directory=None):
+def sort_by_date(extensions, sudo, directory=None):
     """Sort files in directories by creation date.
     Repositories will be in the form of 'YYMMDD-Day'.
 
@@ -107,13 +105,13 @@ def sort_by_date(EXTENSIONS, sudo, directory=None):
     ----------
     directory : string
         Type of files to move. If None, all the files are moved.
-    EXTENSIONS : dict
+    extensions : dict
         Contains the lists of extensions for each type of file.
     sudo : bool
         Sudo mode is activated or not.
     """
     check_parent(sudo)
-    n = get_number_files(EXTENSIONS, directory)
+    n = get_number_files(extensions, directory)
     if n == 0:
         if directory:
             raise EmptyFolder(
@@ -126,7 +124,7 @@ def sort_by_date(EXTENSIONS, sudo, directory=None):
     bar = IncrementalBar(f"Sorting files by date...", max=n)
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
-        if not directory or extension in EXTENSIONS[directory]:
+        if not directory or extension in extensions[directory]:
             if not os.path.isdir(file):
                 creation = time.localtime(os.path.getmtime(file))
                 destination_directory = time.strftime('%y%m%d-%a', creation)
@@ -174,12 +172,12 @@ def check_parent(sudo):
         pass
 
 
-def get_number_files(EXTENSIONS, directory=None):
+def get_number_files(extensions, directory=None):
     """Return number of file of a certain type in cwd.
 
     Parameters
     ----------
-    EXTENSIONS : dict
+    extensions : dict
         Contains the lists of extensions for each type of file.
     directory : string
         Target directory. If None, return total number of files.
@@ -189,30 +187,30 @@ def get_number_files(EXTENSIONS, directory=None):
     count = 0
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
-        if extension in EXTENSIONS[directory]:
+        if extension in extensions[directory]:
             count += 1
     return count
 
 
-def get_folder_from_extension(file, EXTENSIONS):
+def get_folder_from_extension(file, extensions):
     """Return the folder corresponding to an extension.
 
     Parameters
     ----------
     file : string
         File whose extension is targetted.
-    EXTENSIONS : dict
+    extensions : dict
         Contains the lists of extensions for each type of file.
     """
     name, extension = os.path.splitext(file)
     if os.path.isdir(file):
-        if name not in EXTENSIONS:
+        if name not in extensions:
             return 'Folders'
         else:
             return None
     else:
-        for directory in EXTENSIONS:
-            if extension in EXTENSIONS[directory]:
+        for directory in extensions:
+            if extension in extensions[directory]:
                 return directory
         return 'Other'
 
