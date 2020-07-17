@@ -9,7 +9,7 @@ import sys
 import yaml
 import src.video_logging as log
 from termcolor import cprint, colored
-from src.video_logging import SudoException, EmptyFolder
+from src.video_logging import EmptyFolder, BadFolderName, SudoException
 
 
 class CLI(object):
@@ -18,7 +18,7 @@ class CLI(object):
     def __init__(self, data):
         """Class constructor."""
         # data files
-        self.DEFAULT_PARAMETERS = data["DEFAULT_PARAMETERS"]
+        self.PARAMETERS = data["PARAMETERS"]
         self.EXTENSIONS = data["EXTENSIONS"]
         self.HELP = data["HELP"]
         self.WARNINGS = data["WARNINGS"]
@@ -32,10 +32,12 @@ class CLI(object):
         self.sudo_list = ["sudo"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
         # current folder
-        self.folder = os.getcwd() if self.DEFAULT_PARAMETERS["default_folder"] is None else self.DEFAULT_PARAMETERS["default_folder"]
+        self.folder = os.getcwd() if self.PARAMETERS["default_folder"] is None else self.PARAMETERS["default_folder"]
         os.chdir(self.folder)
+        # trash folder name
+        self.trash_folder_name = self.PARAMETERS["trash_folder_name"]
         # sudo mode
-        self.sudo = self.DEFAULT_PARAMETERS["sudo"]
+        self.sudo = self.PARAMETERS["default_sudo"]
 
     def read_command(self, command):
         """
@@ -128,7 +130,7 @@ class CLI(object):
                 if int_time_limit <= 0:
                     print(err(f"Negative (zero included) values are not valid. Please input a positive integer."))
                 else:
-                    print(info(log.trash_videos(int_time_limit, self.EXTENSIONS, self.sudo)))
+                    print(info(log.trash_videos(int_time_limit, self.EXTENSIONS, self.trash_folder_name, self.sudo)))
             except ValueError as e:
                 print(err(f"Could not parse '{time_limit}' as a positive int. Please input a positive integer."))
 
@@ -261,6 +263,9 @@ if __name__ == '__main__':
             cli.read_command(command)
         except EmptyFolder as e:
             print(info(str(e)))
+        except BadFolderName as e:
+            print()  # to avoid ugly output
+            print(err(str(e)))
         except SudoException as e:
             print(warning(cli.WARNINGS["sudo-exception"]))
         except OSError as e:

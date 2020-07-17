@@ -1,7 +1,8 @@
 # CUSTOMIZABLE PARAMETERS
-DEFAULT_PARAMETERS :
-  sudo : False
-  default_folder : null  # string like "C:/users/foo"
+PARAMETERS:
+  default_sudo: False
+  default_folder: null  # string like "C:/users/foo"
+  trash_folder_name: !!str Trash
 EXTENSIONS:
   Audio:
   - .wav

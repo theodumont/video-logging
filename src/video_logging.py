@@ -38,7 +38,7 @@ def folder_sort(extensions, sudo):
     return "Files sorted by type."
 
 
-def trash_videos(time_limit, extensions, sudo):
+def trash_videos(time_limit, extensions, trash_folder_name, sudo):
     """Trash the videos that are shorter than time_limit to get rid of
     the shooting errors.
 
@@ -51,11 +51,11 @@ def trash_videos(time_limit, extensions, sudo):
     sudo : bool
         Sudo mode is activated or not.
     """
-    def move_to_trash(file, duration):
+    def move_to_trash(file, duration, trash_folder_name):
         """Move a video to trash if it is too short.
 
-        Check if a directory named `Trash` exists in current directory. If not,
-        create it. Then, move `file` in `Trash` if `duration` is smaller than
+        Check if a directory named trash_folder_name exists in current directory. If not,
+        create it. Then, move `file` in trash_folder_name if `duration` is smaller than
         `time_limit`.
 
         Parameters
@@ -66,9 +66,17 @@ def trash_videos(time_limit, extensions, sudo):
             Duration of video file.
         """
         if duration < time_limit:
-            if not os.path.isdir('Trash'):
-                os.mkdir('./Trash')
-            os.rename(file, os.path.join('Trash', file))
+            if os.path.exists(trash_folder_name):  # if 'trash_folder_name' already exists
+                if os.path.isfile(trash_folder_name):  # if 'trash_folder_name' is a regular file
+                    raise BadFolderName(
+                        f"You have a file named '{trash_folder_name}' in the current working directory, which is not a valid file name because this tool uses it as a directory name. You may consider changing the 'trash_folder_name' default in 'data.yaml'."
+                    )
+                else:  # if 'trash_folder_name' is a directory
+                    pass
+            else:  # if 'trash_folder_name' does not exist
+                os.mkdir(f'./{trash_folder_name}')
+
+            os.rename(file, os.path.join(trash_folder_name, file))
             return True
         return False
 
@@ -88,7 +96,7 @@ def trash_videos(time_limit, extensions, sudo):
                 # we need to wait a little so that bad things do not happen
                 time.sleep(.001)
                 duration = clip.duration
-            if move_to_trash(file, duration):
+            if move_to_trash(file, duration, trash_folder_name):
                 nb_trashed += 1
             bar.next()
 
@@ -149,10 +157,16 @@ def move_to_dir(file, directory):
         Target directory.
     """
     if directory:
-        if not os.path.isdir(directory):
-            os.mkdir('./{}'.format(directory))
+        if os.path.exists(directory):  # if 'directory' already exists
+            if os.path.isfile(directory):  # if 'directory' is a regular file
+                raise BadFolderName(
+                    f"You have a file named '{directory}' in the current working directory, which is not a valid file name because this tool uses it as a directory name. You may consider changing the 'EXTENSIONS' directories default in 'data.yaml'."
+                )
+            else:  # if 'directory' is a directory
+                pass
+        else:  # if 'directory' does not exist
+            os.mkdir(f'./{directory}')
         os.rename(file, os.path.join(directory, file))
-
 
 def check_parent(sudo):
     """Check if 'video-logging' scripts are in cwd to prevent bad things
@@ -214,8 +228,11 @@ def get_folder_from_extension(file, extensions):
                 return directory
         return 'Other'
 
-class SudoException(Exception):
+class EmptyFolder(Exception):
     pass
 
-class EmptyFolder(Exception):
+class BadFolderName(Exception):
+    pass
+
+class SudoException(Exception):
     pass
