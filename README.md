@@ -45,7 +45,7 @@ Once you are in the right folder, you can realize multiple operations, such as:
 ```
 - trashing the videos of length shorter than a certain value, getting rid of the useless ones, using:
 ```bash
->> trash <time_limit>
+>> trash $TIME_LIMIT
 ```
 where `time_limit` is a positive integer;
 - sorting files by date, using:
