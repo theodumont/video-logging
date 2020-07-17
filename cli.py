@@ -18,6 +18,7 @@ class CLI(object):
     def __init__(self, data):
         """Class constructor."""
         # data files
+        self.DEFAULT_PARAMETERS = data["DEFAULT_PARAMETERS"]
         self.EXTENSIONS = data["EXTENSIONS"]
         self.HELP = data["HELP"]
         self.WARNINGS = data["WARNINGS"]
@@ -33,7 +34,7 @@ class CLI(object):
         # current folder
         self.folder = os.getcwd()
         # sudo mode
-        self.sudo = False
+        self.sudo = self.DEFAULT_PARAMETERS["sudo"]
 
     def read_command(self, command):
         """
