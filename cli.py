@@ -32,7 +32,8 @@ class CLI(object):
         self.sudo_list = ["sudo"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
         # current folder
-        self.folder = os.getcwd()
+        self.folder = os.getcwd() if self.DEFAULT_PARAMETERS["default_folder"] is None else self.DEFAULT_PARAMETERS["default_folder"]
+        os.chdir(self.folder)
         # sudo mode
         self.sudo = self.DEFAULT_PARAMETERS["sudo"]
 

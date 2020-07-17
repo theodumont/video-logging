@@ -1,5 +1,6 @@
 DEFAULT_PARAMETERS :
   sudo : False
+  default_folder : null  # string like "C:/users/foo"
 EXTENSIONS:
   Audio:
   - .wav
