@@ -1,0 +1,163 @@
+EXTENSIONS:
+  Audio:
+  - .wav
+  - .mp3
+  - .raw
+  - .wma
+  - .aif
+  - .cda
+  - .mid
+  - .midi
+  - .mpa
+  - .ogg
+  - .wpl
+  Videos:
+  - .mp4
+  - .m4a
+  - .m4v
+  - .f4v
+  - .f4a
+  - .f4b
+  - .m4b
+  - .m4r
+  - .avi
+  - .wmv
+  - .flv
+  - .MOV
+  - .mov
+  Images:
+  - .ai
+  - .bmp
+  - .gif
+  - .ico
+  - .jpeg
+  - .jpg
+  - .png
+  - .ps
+  - .svg
+  - .tif
+  - .tiff
+  Documents:
+  - .txt
+  - .pdf
+  - .doc
+  - .docx
+  - .odt
+  - .html
+  - .md
+  - .rtf
+  - .xlsx
+  - .pptx
+  - .tex
+  - .key
+  - .odp
+  - .pps
+  - .ppt
+  - .pptx
+  - .ods
+  Folders:
+  - .rar
+  - .zip
+  - .7z
+  - .pkg
+  - .z
+  - .tar.gz
+  Python:
+  - .py
+  - .pyc
+  Internet:
+  - .css
+  - .htm
+  - .html
+  - .js
+  - .php
+  - .xhtml
+  Data:
+  - .csv
+  - .dat
+  - .db
+  - .dbf
+  - .log
+  - .mdb
+  - .sav
+  - .sql
+  - .tar
+  - .xml
+  Fonts:
+  - .fnt
+  - .fon
+  - .otf
+  - .ttf
+  Other:
+  - ''
+HELP:
+  help: |
+    All possible input commands are:
+    - cd: Changes the current directory. For more information about change, please use 'help cd'.
+    - folder: Sorts the current directory files in folders. For more information about folder, please use 'help folder'.
+    - trash: Trashes the useless videos. For more information about trash, please use 'help trash'.
+    - date: Sorts the current directory files in folders by date. For more information about date, please use 'help date'.
+    - help: Brings out various help message, including this one.
+    - exit: Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).
+    The usual way to use the tool is to type the following successive instructions:
+    '>> cd foo'
+    '>> folder'
+    '>> cd Videos'
+    '>> trash 3'
+    '>> date'
+    but you can do what you want!
+  exit: |
+    The 'exit' command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).
+  cd: |
+    The 'cd' command changes the current directory. The syntax to change directory is:
+    '>> cd <directory>'
+  folder: |
+    The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:
+    '>> folder'
+
+    The repositories and the extensions they will contain are:
+  folder-creation: >
+    If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.
+  trash: |
+    The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,
+    '>> trash <time_limit>'
+    where time_limit is the video length threshold.
+  date: |
+    The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:
+    '>> date'
+    The folders will be in the form of 'YYMMDD-Day'.
+  sudo: |
+    If these python scripts are moved by the tool, bad things may happen. Therefore by default, the tool checks if the current directory contains the 'video-logging' folder in its arborescence by looking for the '.videolog' file. This process is usually quite fast but it may take a while when dealing with big directories. The 'sudo' command allows to deactivate this checking, increasing the speed of the tool:
+    '>> sudo on'
+    Use at your on risks. To deactivate sudo mode, simply run
+    '>> sudo off'
+  help-twice:
+    Why are you here?
+  other: >
+    The command couldn't be parsed. Try typing 'help' to see the possible input commands.
+WARNINGS:
+  syntax-dir: |
+    The syntax to change directory is:
+    '>> cd <directory>'
+  syntax-time: |
+    The syntax to choose the time limit is:
+    '>> trash <time limit>'
+  syntax-sudo: |
+    The syntax to change sudo mode is:
+    '>> sudo off'
+  sudo-on: |
+    ! Warning: sudo mode activated. The tool will not check if the current directory contains the 'video-logging' scripts anymore.
+    ! Moving files may do bad things.
+    ! You can turn the sudo mode back off using:
+    '>> sudo off'
+  sudo-off:
+    sudo mode deactivated.
+  sudo-exception: |
+    ! Warning: the current directory contains the 'video-logging' scripts.
+    ! Moving files may do bad things.
+    ! Please move the 'video-logging' folder somewhere else then navigate to the folder you want to sort using the 'cd' command.
+HEADER: |
+  ===============================================
+             VIDEO LOGGING AUTOMATION
+          (and folder sorting and stuff)
+  ===============================================

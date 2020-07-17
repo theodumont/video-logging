@@ -6,7 +6,7 @@ CLI for the video_logging.py module.
 import os
 import platform
 import sys
-import json
+import yaml
 import src.video_logging as log
 from termcolor import cprint, colored
 from src.video_logging import SudoException, EmptyFolder
@@ -172,7 +172,7 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. no more arguments to read, just printing command list.
-            print("".join(HELP["help"]))
+            print(HELP["help"])
         else:
             topic = split_command[cursor]
             cursor += 1
@@ -200,7 +200,7 @@ class CLI(object):
         """
         Print header.
         """
-        print("\n".join(self.HEADER))
+        print(self.HEADER)
 
 
     def pretty_dir(self):
@@ -216,25 +216,25 @@ def err(text):
     """
     Create a pretty error String from text.
     """
-    return f"\033[91m{''.join(text)}\033[m"
+    return f"\033[91m{text}\033[m"
 
 def warning(text):
     """
     Create a pretty warning String from text.
     """
-    return f"\033[93m{''.join(text)}\033[m"
+    return f"\033[93m{text}\033[m"
 
 def info(text):
     """
     Create a pretty informative String from text.
     """
-    return f"\033[92m{''.join(text)}\033[m"
+    return f"\033[92m{text}\033[m"
 
 def dir_style(text):
     """
     Create a pretty directory String from text.
     """
-    return f"\033[94m{''.join(text)}\033[m"
+    return f"\033[94m{text}\033[m"
 
 
 if __name__ == '__main__':
@@ -246,10 +246,9 @@ if __name__ == '__main__':
     else:
         sys.exit(f"Your platform ({platform}) isn't supported yet...")
 
-    with open('src/data.json', 'r') as file:
-        data = json.load(file)
+    with open('src/data.yaml') as yaml_file:
+        data = yaml.load(yaml_file, Loader=yaml.FullLoader)
     cli = CLI(data)
-
     cli.print_header()
 
     while True:
