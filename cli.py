@@ -209,7 +209,7 @@ class CLI(object):
         """
         Return the input headline.
         """
-        prefix = warning("(sudo) ") * self.sudo
+        prefix = warning("(sudo) ") if self.sudo else ""
         suffix = dir_style(self.folder + ">")
         return f"{prefix}{suffix}"
 
