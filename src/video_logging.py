@@ -96,7 +96,8 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
                 # we need to wait a little so that bad things do not happen
                 time.sleep(.001)
                 duration = clip.duration
-            if move_to_trash(file, duration, trash_folder_name):
+            is_moved = move_to_trash(file, duration, trash_folder_name)  # side effect warning
+            if is_moved:
                 nb_trashed += 1
             bar.next()
 
