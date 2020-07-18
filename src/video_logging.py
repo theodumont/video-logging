@@ -120,8 +120,8 @@ def sort_by_date(extensions, sudo, directory=None):
     """
     check_parent(sudo)
     n = get_number_files(extensions, directory)
-    if n == 0:
-        if directory:
+    if n == 0:  # no file match the request
+        if directory is not None:
             raise EmptyFolder(
                     f"Nothing to do here, this folder does not contain any element of the type '{directory}'."
                 )
@@ -156,7 +156,7 @@ def move_to_dir(file, directory):
     directory : string
         Target directory.
     """
-    if directory:
+    if directory is not None:
         if os.path.exists(directory):  # if 'directory' already exists
             if os.path.isfile(directory):  # if 'directory' is a regular file
                 raise BadFolderName(
@@ -196,7 +196,7 @@ def get_number_files(extensions, directory=None):
     directory : string
         Target directory. If None, return total number of files.
     """
-    if not directory:  # all the files
+    if directory is None:  # all the files
         return len(os.listdir())
     count = 0
     for file in os.listdir():
