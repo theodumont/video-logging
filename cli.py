@@ -46,7 +46,7 @@ class CLI(object):
         cursor = 0
         split_command = str.split(command)
         if len(split_command) == 0:
-            # Empty line, we can just ignore it
+            # empty line, we can just ignore it
             return
         # else ...
         instruction = split_command[0]
@@ -90,8 +90,7 @@ class CLI(object):
             # i.e. we have no more arguments available
             print(warning(self.WARNINGS["syntax-dir"]))
         else:
-            # we cannot use split_command here because it does not take spaces
-            # into account
+            # we cannot use split_command here because it does not take spaces into account
             # remove command word
             command = command.split(' ', 1)[1]
             # remove spaces at the beginning
@@ -200,43 +199,31 @@ class CLI(object):
                 print(self.HELP["other"])
 
     def print_header(self):
-        """
-        Print header.
-        """
+        """Print header."""
         print(self.HEADER)
 
 
     def pretty_dir(self):
-        """
-        Return the input headline.
-        """
+        """Return the input headline."""
         prefix = warning("(sudo) ") if self.sudo else ""
         suffix = dir_style(self.folder + ">")
         return f"{prefix}{suffix}"
 
 
 def err(text):
-    """
-    Create a pretty error String from text.
-    """
+    """Create a pretty error string from text."""
     return f"\033[91m{text}\033[m"
 
 def warning(text):
-    """
-    Create a pretty warning String from text.
-    """
+    """Create a pretty warning string from text."""
     return f"\033[93m{text}\033[m"
 
 def info(text):
-    """
-    Create a pretty informative String from text.
-    """
+    """Create a pretty informative string from text."""
     return f"\033[92m{text}\033[m"
 
 def dir_style(text):
-    """
-    Create a pretty directory String from text.
-    """
+    """Create a pretty directory string from text."""
     return f"\033[94m{text}\033[m"
 
 

@@ -20,7 +20,7 @@ def folder_sort(extensions, sudo):
     extensions : dict
         Contains the lists of extensions for each type of file.
     sudo : bool
-        Sudo mode is activated or not.
+        Whether sudo mode is activated or not.
     """
     check_parent(sudo)
     n = get_number_files(extensions)
@@ -44,18 +44,22 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
     Parameters
     ----------
     time_limit : int
-        Duration limit.
+        Duration limit. If a video has a duration smaller than time_limit, it is
+        moved into trash_folder_name.
     extensions : dict
         Contains the lists of extensions for each type of file.
+    trash_folder_name : string
+        Name of the folder where to put the trashed videos. Equal to 'Trash' by
+        default but can be change in the src/data.yaml file.
     sudo : bool
-        Sudo mode is activated or not.
+        Whether sudo mode is activated or not.
     """
     def move_to_trash(file, duration, trash_folder_name):
         """Move a video to trash if it is too short.
 
-        Check if a directory named trash_folder_name exists in current directory. If not,
-        create it. Then, move `file` in trash_folder_name if `duration` is smaller than
-        `time_limit`.
+        Check if a directory named trash_folder_name exists in current directory.
+        If not, create it. Then, move `file` in trash_folder_name if `duration`
+        is smaller than `time_limit`.
 
         Parameters
         ----------
@@ -63,6 +67,9 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
             File to check.
         duration : int
             Duration of video file.
+        trash_folder_name : string
+            Name of the folder where to put the trashed videos. Equal to 'Trash'
+            by default but can be change in the src/data.yaml file.
         """
         if duration < time_limit:
             if os.path.exists(trash_folder_name):  # if 'trash_folder_name' already exists
@@ -95,7 +102,7 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
                 # we need to wait a little so that bad things do not happen
                 time.sleep(.001)
                 duration = clip.duration
-            is_moved = move_to_trash(file, duration, trash_folder_name)  # side effect warning
+            is_moved = move_to_trash(file, duration, trash_folder_name)  # warning: side effect happening here
             if is_moved:
                 nb_trashed += 1
             bar.next()
@@ -107,20 +114,21 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
 
 def sort_by_date(extensions, sudo, directory=None):
     """Sort files in directories by creation date.
+
     Repositories will be in the form of 'YYMMDD-Day'.
 
     Parameters
     ----------
-    directory : string
-        Type of files to move. If None, all the files are moved.
     extensions : dict
         Contains the lists of extensions for each type of file.
     sudo : bool
-        Sudo mode is activated or not.
+        Whether sudo mode is activated or not.
+    directory : string
+        Type of files to move. If None, all the files are moved.
     """
     check_parent(sudo)
     n = get_number_files(extensions, directory)
-    if n == 0:  # no file match the request
+    if n == 0:  # i.e. no file match the request
         if directory is not None:
             raise EmptyFolder(
                     f"Nothing to do here, this folder does not contain any element of the type '{directory}'."
@@ -146,6 +154,7 @@ def sort_by_date(extensions, sudo, directory=None):
 
 def move_to_dir(file, directory):
     """Move file to directory.
+
     Check if a directory named `directory` exists in current directory. If not,
     create it. Then, move `file` in `directory`.
 
@@ -169,20 +178,20 @@ def move_to_dir(file, directory):
         os.rename(file, os.path.join(directory, file))
 
 def check_parent(sudo):
-    """Check if 'video-logging' scripts are in cwd to prevent bad things
-    from happening.
+    """Check if 'video-logging' scripts are in cwd to prevent bad things from
+    happening.
 
     Parameters
     ----------
     sudo : bool
-        Sudo mode is activated or not.
+        Whether sudo mode is activated or not.
     """
     if not sudo:
         for root, dirs, files in os.walk("./"):
             if ".videolog" in files:
                 raise SudoException()
     else:
-        # maybe print a message here
+        # maybe print a message here if verbose
         pass
 
 
