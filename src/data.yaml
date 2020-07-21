@@ -1,9 +1,9 @@
 # CUSTOMIZABLE PARAMETERS
 PARAMETERS:
-  default_sudo: False
-  default_folder: null  # string like "C:/users/foo"
+  default_sudo: False  # if you want to start in sudo mode by default
+  default_folder: null  # where you want the tool to boot. Must be a string like "C:/users/foo"
   trash_folder_name: !!str Trash
-EXTENSIONS:
+EXTENSIONS:  # you can customize the extensions lists and even create new categories
   Audio:
   - .wav
   - .mp3
@@ -93,7 +93,7 @@ EXTENSIONS:
   - .fon
   - .otf
   - .ttf
-  Other:
+  Other:  # but don't touch this ;)
   - ''
 
 # HELP AND DISPLAY MESSAGES
