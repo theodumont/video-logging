@@ -8,7 +8,6 @@ import platform
 import sys
 import yaml
 import src.video_logging as log
-from termcolor import cprint, colored
 from src.video_logging import EmptyFolder, BadFolderName, SudoException
 
 
@@ -241,7 +240,7 @@ def dir_style(text):
     return f"\033[94m{text}\033[m"
 
 
-if __name__ == '__main__':
+def run():
     platform = platform.system()
     if platform == "Windows":
         os.system('cls')
@@ -274,3 +273,6 @@ if __name__ == '__main__':
             print("exit")  # to avoid ugly output
             cli.exit()
             break
+
+if __name__ == '__main__':
+    run()

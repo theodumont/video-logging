@@ -7,9 +7,8 @@ video logging process.
 
 import os
 import time
-import subprocess
 from moviepy.video.io.VideoFileClip import VideoFileClip
-from progress.bar import Bar, IncrementalBar
+from progress.bar import IncrementalBar
 
 
 def folder_sort(extensions, sudo):
