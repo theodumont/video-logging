@@ -50,7 +50,7 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
         Contains the lists of extensions for each type of file.
     trash_folder_name : string
         Name of the folder where to put the trashed videos. Equal to 'Trash' by
-        default but can be change in the src/data.yaml file.
+        default but can be change in the videologging/data.yaml file.
     sudo : bool
         Whether sudo mode is activated or not.
     """
@@ -69,7 +69,7 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
             Duration of video file.
         trash_folder_name : string
             Name of the folder where to put the trashed videos. Equal to 'Trash'
-            by default but can be change in the src/data.yaml file.
+            by default but can be change in the videologging/data.yaml file.
         """
         if duration < time_limit:
             if os.path.exists(trash_folder_name):  # if 'trash_folder_name' already exists

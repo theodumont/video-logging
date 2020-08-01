@@ -1,18 +1,16 @@
 # encoding: utf-8
 """
-CLI for the video_logging.py module.
+CLI for videologging.
 """
 
 import os
-import platform
 import sys
 import yaml
-import src.video_logging as log
-from src.video_logging import EmptyFolder, BadFolderName, SudoException
+import videologging.functions as fun
 
 
 class CLI(object):
-    """CLI for the video_logging module."""
+    """CLI for videologging."""
 
     def __init__(self, data):
         """Class constructor."""
@@ -111,7 +109,7 @@ class CLI(object):
         """
         When the 'folder' command is read.
         """
-        print(info(log.folder_sort(self.EXTENSIONS, self.sudo)))
+        print(info(fun.folder_sort(self.EXTENSIONS, self.sudo)))
 
     def process_trash(self, split_command, cursor):
         """
@@ -128,7 +126,7 @@ class CLI(object):
                 if int_time_limit <= 0:
                     print(err(f"Negative (zero included) values are not valid. Please input a positive integer."))
                 else:
-                    print(info(log.trash_videos(int_time_limit, self.EXTENSIONS, self.trash_folder_name, self.sudo)))
+                    print(info(fun.trash_videos(int_time_limit, self.EXTENSIONS, self.trash_folder_name, self.sudo)))
             except ValueError as e:
                 print(err(f"Could not parse '{time_limit}' as a positive int. Please input a positive integer."))
 
@@ -138,14 +136,14 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            print(info(log.sort_by_date(self.EXTENSIONS, self.sudo)))
+            print(info(fun.sort_by_date(self.EXTENSIONS, self.sudo)))
         else:
             directory = split_command[cursor]
             cursor += 1
             if directory not in self.EXTENSIONS:
                 print(err(f"{directory} is not a valid directory. Please input a valid directory."))
             else:
-                print(info(log.sort_by_date(self.EXTENSIONS, self.sudo, directory)))
+                print(info(fun.sort_by_date(self.EXTENSIONS, self.sudo, directory)))
 
     def process_sudo(self, split_command, cursor):
         """
@@ -227,7 +225,8 @@ def dir_style(text):
     return f"\033[94m{text}\033[m"
 
 
-def run():
+def main():
+    import platform
     platform = platform.system()
     if platform == "Windows":
         os.system('cls')
@@ -236,7 +235,7 @@ def run():
     else:
         sys.exit(f"Your platform ({platform}) isn't supported yet...")
 
-    with open('src/data.yaml') as yaml_file:
+    with open('videologging/data.yaml') as yaml_file:
         data = yaml.load(yaml_file, Loader=yaml.FullLoader)
     cli = CLI(data)
     cli.print_header()
@@ -247,12 +246,12 @@ def run():
             print(cli.pretty_dir())
             command = input(dir_style(">> "))
             cli.read_command(command)
-        except EmptyFolder as e:
+        except fun.EmptyFolder as e:
             print(info(str(e)))
-        except BadFolderName as e:
+        except fun.BadFolderName as e:
             print()  # to avoid ugly output
             print(err(str(e)))
-        except SudoException as e:
+        except fun.SudoException as e:
             print(warning(cli.WARNINGS["sudo-exception"]))
         except OSError as e:
             print(error(str(e)))
@@ -262,4 +261,4 @@ def run():
             break
 
 if __name__ == '__main__':
-    run()
+    main()
