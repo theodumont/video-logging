@@ -25,6 +25,7 @@ class CLI(object):
         self.folder_list = ["folder", "f", "folders"]
         self.trash_list = ["trash", "t", "short"]
         self.date_list = ["date", "d", "when"]
+        self.rename_list = ["rename", "r", "name"]
         self.help_list = ["help", "h", "?", "what", "how"]
         self.sudo_list = ["sudo"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
@@ -61,6 +62,9 @@ class CLI(object):
 
         elif instruction.lower() in self.date_list:
             self.process_date(split_command, cursor)
+
+        elif instruction.lower() in self.rename_list:
+            self.process_rename(split_command, cursor)
 
         elif instruction.lower() in self.help_list:
             self.process_help(split_command, cursor)
@@ -144,6 +148,22 @@ class CLI(object):
                 print(err(f"{directory} is not a valid directory. Please input a valid directory."))
             else:
                 print(info(fun.sort_by_date(self.EXTENSIONS, self.sudo, directory)))
+
+    def process_rename(self, split_command, cursor):
+        """
+        When the 'rename' command is read.
+        """
+        if len(split_command) == cursor:
+            # i.e. we have no more arguments available
+            print(info(fun.rename_files(self.EXTENSIONS)))
+        else:
+            directory = split_command[cursor]
+            cursor += 1
+            if directory not in self.EXTENSIONS:
+                print(err(f"{directory} is not a valid directory. Please input a valid directory."))
+            else:
+                print(info(fun.rename_files(self.EXTENSIONS, directory)))
+
 
     def process_sudo(self, split_command, cursor):
         """

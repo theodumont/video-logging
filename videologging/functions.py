@@ -9,6 +9,8 @@ import os
 import time
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from progress.bar import IncrementalBar
+from subprocess import Popen
+from psutil import Process
 
 
 def folder_sort(extensions, sudo):
@@ -152,6 +154,93 @@ def sort_by_date(extensions, sudo, directory=None):
     return f"Files sorted by date."
 
 
+def rename_files(extensions, directory=None):
+    """Open and rename the files in current directory.
+
+    Parameters
+    ----------
+    extensions : dict
+        Contains the lists of extensions for each type of file.
+    directory : string
+        Type of files to rename. If None, all the files are renamed.
+
+    Notes
+    -----
+    * Folders are not renamed;
+    * The process of opening and renaming files is as follows:
+        1. run the command `start /WAIT $file` in shell;
+        2. wait for the input of the user;
+        3. if the window hasn't been closed yet by the user, close it using
+        `psutil`.
+    This method is inspired by https://stackoverflow.com/a/20820644.
+    """
+    n = get_number_files(extensions, directory, ignore_folders=True)
+    if n == 0:  # i.e. no file match the request
+        if directory is not None:
+            raise EmptyFolder(
+                    f"Nothing to do here, this folder does not contain any element of the type '{directory}'."
+                )
+        else:
+            raise EmptyFolder(
+                "Nothing to do here, this folder is empty."
+            )
+    nb_renamed = 0
+    nb_trashed = 0
+    try:
+        for file in os.listdir():
+            extension = os.path.splitext(file)[-1]
+            if os.path.isdir(file) or (directory is not None and extension not in extensions[directory]):
+                # we don't have to rename this file
+                continue
+
+            # run subprocess
+            process = Popen("start /WAIT " + file, shell=True)
+            # loop until new name for file is ok
+            new_name = ""
+            while new_name in ["", "help"]:
+                if new_name == "help":
+                    print("help on renaming")
+                    new_name = ""
+                new_name = input(f"[{file}] >> new name: ")
+            # kill subprocess if not closed
+            if process.poll() is None:
+                Process(process.pid).children()[0].kill()
+                time.sleep(.1)
+            # use input
+            if new_name == "trash":
+                move_to_dir(file, "Trash")
+                nb_trashed += 1
+            elif new_name == "exit":
+                raise UserInterrupt()  # to leave the two loops
+            else:
+                os.rename(file, new_name + extension)
+                nb_renamed += 1
+
+    except UserInterrupt:
+        print("Stopping file renaming...")
+    except (EOFError, KeyboardInterrupt):
+        print("exit\nStopping file renaming...")
+    except Exception as e:
+        print(e)
+    finally:
+        # kill subprocess if not closed
+        if process.poll() is None:
+            Process(process.pid).children()[0].kill()
+        # print result in shell
+        term_renamed = "s" if nb_renamed >= 2 else ""
+        sentence_renamed = f"{nb_renamed} file{term_renamed} renamed."
+        term_trashed = "s" if nb_trashed >= 2 else ""
+        sentence_trashed = f"{nb_trashed} file{term_trashed} trashed."
+        if nb_renamed >= 1 and nb_trashed >= 1:
+            return f"{sentence_renamed}\n{sentence_trashed}"
+        elif nb_renamed != 0:
+            return sentence_renamed
+        elif nb_trashed != 0:
+            return sentence_trashed
+        else:  # both are 0
+            return "Nothing has been modified."
+
+
 def move_to_dir(file, directory):
     """Move file to directory.
 
@@ -195,7 +284,7 @@ def check_parent(sudo):
         pass
 
 
-def get_number_files(extensions, directory=None):
+def get_number_files(extensions, directory=None, ignore_folders=False):
     """Return number of file of a certain type in cwd.
 
     Parameters
@@ -205,13 +294,12 @@ def get_number_files(extensions, directory=None):
     directory : string
         Target directory. If None, return total number of files.
     """
-    if directory is None:  # all the files
-        return len(os.listdir())
     count = 0
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
-        if extension in extensions[directory]:
-            count += 1
+        if directory is None or extension in extensions[directory]:
+            if not ignore_folders or os.path.isfile(file):
+                count += 1
     return count
 
 
@@ -244,4 +332,7 @@ class BadFolderName(Exception):
     pass
 
 class SudoException(Exception):
+    pass
+
+class UserInterrupt(Exception):
     pass
