@@ -27,9 +27,7 @@ def folder_sort(extensions, sudo):
     check_parent(sudo)
     n = get_number_files(extensions)
     if n == 0:
-        raise EmptyFolder(
-            "Nothing to do here, this folder is empty."
-        )
+        raise EmptyFolder("Nothing to do here, this folder is empty.")
     bar = IncrementalBar("Sorting files...", max=n)
 
     for file in os.listdir():
@@ -76,9 +74,7 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
         if duration < time_limit:
             if os.path.exists(trash_folder_name):  # if 'trash_folder_name' already exists
                 if os.path.isfile(trash_folder_name):  # if 'trash_folder_name' is a regular file
-                    raise BadFolderName(
-                        f"You have a file named '{trash_folder_name}' in the current working directory, which is not a valid file name because this tool uses it as a directory name. You may consider changing the 'trash_folder_name' default in 'data.yaml'."
-                    )
+                    raise BadFolderName(f"You have a file named '{trash_folder_name}' in the current working directory, which is not a valid file name because this tool uses it as a directory name. You may consider changing the 'trash_folder_name' default in 'data.yaml'.")
                 else:  # if 'trash_folder_name' is a directory
                     pass
             else:  # if 'trash_folder_name' does not exist
@@ -91,11 +87,9 @@ def trash_videos(time_limit, extensions, trash_folder_name, sudo):
     check_parent(sudo)
     n = get_number_files(extensions, directory='Videos')
     if n == 0:
-        raise EmptyFolder(
-            "Nothing to do here, this folder does not countain any video."
-        )
-    bar = IncrementalBar(f"Trashing videos of duration <= {time_limit}s...", max=n)
+        raise EmptyFolder("Nothing to do here, this folder does not countain any video.")
 
+    bar = IncrementalBar(f"Trashing videos of duration <= {time_limit}s...", max=n)
     nb_trashed = 0
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
@@ -132,13 +126,10 @@ def sort_by_date(extensions, sudo, directory=None):
     n = get_number_files(extensions, directory)
     if n == 0:  # i.e. no file match the request
         if directory is not None:
-            raise EmptyFolder(
-                    f"Nothing to do here, this folder does not contain any element of the type '{directory}'."
-                )
+            raise EmptyFolder(f"Nothing to do here, this folder does not contain any element of the type '{directory}'.")
         else:
-            raise EmptyFolder(
-                "Nothing to do here, this folder is empty."
-            )
+            raise EmptyFolder("Nothing to do here, this folder is empty.")
+
     bar = IncrementalBar(f"Sorting files by date...", max=n)
     for file in os.listdir():
         extension = os.path.splitext(file)[1]
@@ -177,13 +168,10 @@ def rename_files(extensions, directory=None):
     n = get_number_files(extensions, directory, ignore_folders=True)
     if n == 0:  # i.e. no file match the request
         if directory is not None:
-            raise EmptyFolder(
-                    f"Nothing to do here, this folder does not contain any element of the type '{directory}'."
-                )
+            raise EmptyFolder(f"Nothing to do here, this folder does not contain any element of the type '{directory}'.")
         else:
-            raise EmptyFolder(
-                "Nothing to do here, this folder is empty."
-            )
+            raise EmptyFolder("Nothing to do here, this folder is empty.")
+
     nb_renamed = 0
     nb_trashed = 0
     try:
@@ -257,9 +245,7 @@ def move_to_dir(file, directory):
     if directory is not None:
         if os.path.exists(directory):  # if 'directory' already exists
             if os.path.isfile(directory):  # if 'directory' is a regular file
-                raise BadFolderName(
-                    f"You have a file named '{directory}' in the current working directory, which is not a valid file name because this tool uses it as a directory name. You may consider changing the 'EXTENSIONS' directories default in 'data.yaml'."
-                )
+                raise BadFolderName(f"You have a file named '{directory}' in the current working directory, which is not a valid file name because this tool uses it as a directory name. You may consider changing the 'EXTENSIONS' directories default in 'data.yaml'.")
             else:  # if 'directory' is a directory
                 pass
         else:  # if 'directory' does not exist

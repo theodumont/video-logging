@@ -182,9 +182,7 @@ class CLI(object):
                 self.sudo = False
                 print(warning(self.WARNINGS["sudo-off"]))
             else:
-                print(err(
-                    "The possible values for sudo mode are 'on' and 'off'."
-                ))
+                print(err("The possible values for sudo mode are 'on' and 'off'."))
 
     def process_help(self, split_command, cursor):
         """
