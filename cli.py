@@ -34,6 +34,8 @@ class CLI(object):
         os.chdir(self.folder)
         # trash folder name
         self.trash_folder_name = self.PARAMETERS["trash_folder_name"]
+        # open while renaming
+        self.open_while_renaming = self.PARAMETERS["open_while_renaming"]
         # sudo mode
         self.sudo = self.PARAMETERS["default_sudo"]
 
@@ -155,14 +157,14 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            print(info(fun.rename_files(self.EXTENSIONS)))
+            print(info(fun.rename_files(self.EXTENSIONS, self.open_while_renaming)))
         else:
             directory = split_command[cursor]
             cursor += 1
             if directory not in self.EXTENSIONS:
                 print(err(f"{directory} is not a valid directory. Please input a valid directory."))
             else:
-                print(info(fun.rename_files(self.EXTENSIONS, directory)))
+                print(info(fun.rename_files(self.EXTENSIONS, self.open_while_renaming, directory)))
 
 
     def process_sudo(self, split_command, cursor):

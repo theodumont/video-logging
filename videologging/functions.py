@@ -145,7 +145,7 @@ def sort_by_date(extensions, sudo, directory=None):
     return f"Files sorted by date."
 
 
-def rename_files(extensions, directory=None):
+def rename_files(extensions, open_while_renaming, directory=None):
     """Open and rename the files in current directory.
 
     Parameters
@@ -181,8 +181,9 @@ def rename_files(extensions, directory=None):
                 # we don't have to rename this file
                 continue
 
-            # run subprocess
-            process = Popen("start /WAIT " + file, shell=True)
+            if open_while_renaming:
+                # run subprocess
+                process = Popen("start /WAIT " + file, shell=True)
             # loop until new name for file is ok
             new_name = ""
             while new_name in ["", "help"]:
@@ -190,10 +191,11 @@ def rename_files(extensions, directory=None):
                     print("help on renaming")
                     new_name = ""
                 new_name = input(f"[{file}] >> new name: ")
-            # kill subprocess if not closed
-            if process.poll() is None:
-                Process(process.pid).children()[0].kill()
-                time.sleep(.1)
+            if open_while_renaming:
+                # kill subprocess if not closed
+                if process.poll() is None:
+                    Process(process.pid).children()[0].kill()
+                    time.sleep(.1)
             # use input
             if new_name == "trash":
                 move_to_dir(file, "Trash")
@@ -211,9 +213,10 @@ def rename_files(extensions, directory=None):
     except Exception as e:
         print(e)
     finally:
-        # kill subprocess if not closed
-        if process.poll() is None:
-            Process(process.pid).children()[0].kill()
+        if open_while_renaming:
+            # kill subprocess if not closed
+            if process.poll() is None:
+                Process(process.pid).children()[0].kill()
         # print result in shell
         term_renamed = "s" if nb_renamed >= 2 else ""
         sentence_renamed = f"{nb_renamed} file{term_renamed} renamed."

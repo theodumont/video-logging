@@ -2,7 +2,8 @@
 PARAMETERS:
   default_sudo: False  # if you want to start in sudo mode by default
   default_folder: null  # where you want the tool to boot. Must be a string like "C:/users/foo"
-  trash_folder_name: !!str Trash
+  trash_folder_name: !!str Trash  # name of default folder for trashing files
+  open_while_renaming: True  # whether or not opening files while renaming them
 EXTENSIONS:  # you can customize the extensions lists and even create new categories
   Audio:
   - .wav
