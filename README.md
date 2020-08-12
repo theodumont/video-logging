@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/github/license/theodumont/video-logging)](https://github.com/theodumont/video-logging/blob/master/LICENSE)
 ![Windows Support](https://img.shields.io/badge/Windows-Support-brightgreen.svg)
-![Linux Support](https://img.shields.io/badge/Linux-Support-brightgreen.svg)
+<!-- ![Linux Support](https://img.shields.io/badge/Linux-Support-brightgreen.svg) -->
 
 # Video logging for editing
 
