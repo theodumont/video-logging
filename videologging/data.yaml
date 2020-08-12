@@ -104,6 +104,7 @@ HELP:
     - folder: Sorts the current directory files in folders. For more information about folder, please use 'help folder'.
     - trash: Trashes the useless videos. For more information about trash, please use 'help trash'.
     - date: Sorts the current directory files in folders by date. For more information about date, please use 'help date'.
+    - rename: Opens and lets you rename the files in the current directory. For more information about rename, please use 'help rename'.
     - help: Brings out various help message, including this one.
     - exit: Leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).
     The usual way to use the tool is to type the following successive instructions:
@@ -117,7 +118,7 @@ HELP:
     The 'exit' command leaves this tool. If your are using a keyboard you can also use EOF shortcut (Ctrl + D on Linux for instance).
   cd: |
     The 'cd' command changes the current directory. The syntax to change directory is:
-    '>> cd <directory>'
+    '>> cd $directory'
   folder: |
     The 'folder' command sorts the files in the current directory by type. The syntax to use the command is:
     '>> folder'
@@ -127,8 +128,8 @@ HELP:
     If they do not already exist and if a file of a corresponding extension is found in the current directory, these directories will be created and then filled.
   trash: |
     The 'trash' command puts the videos of the current directory that are too short in a 'Trash' directory. The syntax to use the command is,
-    '>> trash <time_limit>'
-    where time_limit is the video length threshold.
+    '>> trash $time_limit'
+    where $time_limit is the video length threshold.
   date: |
     The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:
     '>> date'
