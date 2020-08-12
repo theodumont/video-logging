@@ -152,6 +152,8 @@ def rename_files(extensions, open_while_renaming, directory=None):
     ----------
     extensions : dict
         Contains the lists of extensions for each type of file.
+    open_while_renaming : bool
+        Whether or not opening files while renaming them.
     directory : string
         Type of files to rename. If None, all the files are renamed.
 
