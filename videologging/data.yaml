@@ -133,6 +133,10 @@ HELP:
     The 'date' command sorts the files in the current directory by creation date. The syntax to use the command is:
     '>> date'
     The folders will be in the form of 'YYMMDD-Day'.
+  rename: |
+    The 'rename' command opens and lets you rename the files in the current directory. The folders aren't examined. The syntax to use the command is:
+    '>> rename $directory'
+    where $directory is the type of files you want to rename. If $directory is not specified, all files are going to be examined.
   sudo: |
     If these python scripts are moved by the tool, bad things may happen. Therefore by default, the tool checks if the current directory contains the 'video-logging' folder in its arborescence by looking for the '.videolog' file. This process is usually quite fast but it may take a while when dealing with big directories. The 'sudo' command allows to deactivate this checking, increasing the speed of the tool:
     '>> sudo on'

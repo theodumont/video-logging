@@ -207,6 +207,8 @@ class CLI(object):
                 print(self.HELP["trash"])
             elif topic in self.date_list:
                 print(self.HELP["date"])
+            elif topic in self.rename_list:
+                print(self.HELP["rename"])
             elif topic in self.sudo_list:
                 print(self.HELP["sudo"])
             elif topic in self.help_list:
