@@ -29,6 +29,22 @@ class CLI(object):
         self.help_list = ["help", "h", "?", "what", "how"]
         self.sudo_list = ["sudo"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
+        # Using a dictionary for faster and cleaner lookup. This translates an
+        # accepted user input into its internal representation. Several keywords
+        # can have the same internal representation (if they trigger the same
+        # command).
+        self.preprocess = dict()
+        # Because building the dictionnary using the litteral syntax, we use
+        # dict comprehension instead.
+        self.preprocess.update({keyword: "cd" for keyword in self.cd_list})
+        self.preprocess.update({keyword: "folder" for keyword in self.folder_list})
+        self.preprocess.update({keyword: "trash" for keyword in self.trash_list})
+        self.preprocess.update({keyword: "date" for keyword in self.date_list})
+        self.preprocess.update({keyword: "rename" for keyword in self.rename_list})
+        self.preprocess.update({keyword: "help" for keyword in self.help_list})
+        self.preprocess.update({keyword: "sudo" for keyword in self.sudo_list})
+        self.preprocess.update({keyword: "exit" for keyword in self.exit_list})
+
         # current folder
         self.folder = os.getcwd() if self.PARAMETERS["default_folder"] is None else self.PARAMETERS["default_folder"]
         os.chdir(self.folder)
@@ -50,32 +66,36 @@ class CLI(object):
             # empty line, we can just ignore it
             return
         # else ...
-        instruction = split_command[0]
+        instruction = split_command[0].lower()
         cursor += 1
 
-        if instruction.lower() in self.cd_list:
-            self.process_change_dir(command, split_command, cursor)
+        if instruction in self.preprocess:
+            # The instruction is recognized by the application, we now branch depending on the internal representation of the instruction.
+            internal_instruction = self.preprocess[instruction]
 
-        elif instruction.lower() in self.folder_list:
-            self.process_folder()
+            if internal_instruction == "cd":
+                self.process_change_dir(command, split_command, cursor)
 
-        elif instruction.lower() in self.trash_list:
-            self.process_trash(split_command, cursor)
+            elif internal_instruction == "folder":
+                self.process_folder()
 
-        elif instruction.lower() in self.date_list:
-            self.process_date(split_command, cursor)
+            elif internal_instruction == "trash":
+                self.process_trash(split_command, cursor)
 
-        elif instruction.lower() in self.rename_list:
-            self.process_rename(split_command, cursor)
+            elif internal_instruction == "date":
+                self.process_date(split_command, cursor)
 
-        elif instruction.lower() in self.help_list:
-            self.process_help(split_command, cursor)
+            elif internal_instruction == "rename":
+                self.process_rename(split_command, cursor)
 
-        elif instruction.lower() in self.sudo_list:
-            self.process_sudo(split_command, cursor)
+            elif internal_instruction == "help":
+                self.process_help(split_command, cursor)
 
-        elif instruction.lower() in self.exit_list:
-            self.exit()
+            elif internal_instruction == "sudo":
+                self.process_sudo(split_command, cursor)
+
+            elif internal_instruction == "exit":
+                self.exit()
         else:
             print(err(f"The input command {command} could not be parsed, because the tool did not understand the term '{instruction}'. If you wish to you can use :\n'>> help'\nThat instruction will bring a list of the available instruction and their use cases."))
 
@@ -98,10 +118,7 @@ class CLI(object):
             # remove command word
             command = command.split(' ', 1)[1]
             # remove spaces at the beginning
-            nb_spaces = 0
-            while command[nb_spaces] == ' ':
-                nb_spaces += 1
-            directory = command[nb_spaces:]
+            directory = command.lstrip()
 
             cursor += 1
             try:
@@ -175,12 +192,12 @@ class CLI(object):
             # i.e. we have no more arguments available
             print(warning(self.WARNINGS["syntax-sudo"]))
         else:
-            mode = split_command[cursor]
+            mode = split_command[cursor].lower()
             cursor += 1
-            if mode.lower() == "on":
+            if mode == "on":
                 self.sudo = True
                 print(warning(self.WARNINGS["sudo-on"]))
-            elif mode.lower() == "off":
+            elif mode == "off":
                 self.sudo = False
                 print(warning(self.WARNINGS["sudo-off"]))
             else:
@@ -196,26 +213,27 @@ class CLI(object):
         else:
             topic = split_command[cursor]
             cursor += 1
-            if topic in self.exit_list:
-                print(self.HELP["exit"])
-            elif topic in self.cd_list:
-                print(self.HELP["cd"])
-            elif topic in self.folder_list:
-                print(self.HELP["folder"])
-                for directory in self.EXTENSIONS:
-                    print(f"{directory}:".ljust(11, ' ') + str(self.EXTENSIONS[directory]))
-                print(self.HELP["folder-creation"])
-            elif topic in self.trash_list:
-                print(self.HELP["trash"])
-            elif topic in self.date_list:
-                print(self.HELP["date"])
-            elif topic in self.rename_list:
-                print(self.HELP["rename"])
-            elif topic in self.sudo_list:
-                print(self.HELP["sudo"])
-            elif topic in self.help_list:
-                print(self.HELP["help-twice"])
+            # Also using the preprocessing dictionary here.
+            if topic in self.preprocess:
+                # Getting the internal representation.
+                internal_instruction = self.preprocess[topic]
+
+                # We can almost grab the help directly, except for the help
+                # keyword itself, whose help section is called "help-twice".
+                if internal_instruction == "help":
+                    internal_instruction == "help-twice"
+
+                # Now we can print the help for the desired instruction.
+                print(self.HELP[internal_instruction])
+
+                # If the instruction was "folder", then we output some more
+                # contextual help.
+                if internal_instruction == "folder":
+                    for directory in self.EXTENSIONS:
+                        print(f"{directory}:".ljust(11, ' '), str(self.EXTENSIONS[directory]), sep='')
+                        print(self.HELP["folder-creation"])
             else:
+                # The instruction is not recognized.
                 print(self.HELP["other"])
 
     def print_header(self):
