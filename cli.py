@@ -50,31 +50,31 @@ class CLI(object):
             # empty line, we can just ignore it
             return
         # else ...
-        instruction = split_command[0]
+        instruction = split_command[0].lower()
         cursor += 1
 
-        if instruction.lower() in self.cd_list:
+        if instruction in self.cd_list:
             self.process_change_dir(command, split_command, cursor)
 
-        elif instruction.lower() in self.folder_list:
+        elif instruction in self.folder_list:
             self.process_folder()
 
-        elif instruction.lower() in self.trash_list:
+        elif instruction in self.trash_list:
             self.process_trash(split_command, cursor)
 
-        elif instruction.lower() in self.date_list:
+        elif instruction in self.date_list:
             self.process_date(split_command, cursor)
 
-        elif instruction.lower() in self.rename_list:
+        elif instruction in self.rename_list:
             self.process_rename(split_command, cursor)
 
-        elif instruction.lower() in self.help_list:
+        elif instruction in self.help_list:
             self.process_help(split_command, cursor)
 
-        elif instruction.lower() in self.sudo_list:
+        elif instruction in self.sudo_list:
             self.process_sudo(split_command, cursor)
 
-        elif instruction.lower() in self.exit_list:
+        elif instruction in self.exit_list:
             self.exit()
         else:
             print(err(f"The input command {command} could not be parsed, because the tool did not understand the term '{instruction}'. If you wish to you can use :\n'>> help'\nThat instruction will bring a list of the available instruction and their use cases."))
