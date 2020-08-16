@@ -29,21 +29,12 @@ class CLI(object):
         self.help_list = ["help", "h", "?", "what", "how"]
         self.sudo_list = ["sudo"]
         self.exit_list = ["exit", "e", "leave", "l", "quit", "q"]
-        # Using a dictionary for faster and cleaner lookup. This translates an
-        # accepted user input into its internal representation. Several keywords
-        # can have the same internal representation (if they trigger the same
-        # command).
+        # Using a dictionary that translates an accepted user input into its internal representation.
+        # Several keywords can have the same internal representation (if they trigger the same command).
         self.preprocess = dict()
-        # Because building the dictionnary using the litteral syntax, we use
-        # dict comprehension instead.
-        self.preprocess.update({keyword: "cd" for keyword in self.cd_list})
-        self.preprocess.update({keyword: "folder" for keyword in self.folder_list})
-        self.preprocess.update({keyword: "trash" for keyword in self.trash_list})
-        self.preprocess.update({keyword: "date" for keyword in self.date_list})
-        self.preprocess.update({keyword: "rename" for keyword in self.rename_list})
-        self.preprocess.update({keyword: "help" for keyword in self.help_list})
-        self.preprocess.update({keyword: "sudo" for keyword in self.sudo_list})
-        self.preprocess.update({keyword: "exit" for keyword in self.exit_list})
+        for instruction in ["cd", "folder", "trash", "date", "rename", "help", "sudo", "exit"]:
+            instruction_list = getattr(self, instruction + "_list")
+            self.preprocess.update({keyword: instruction for keyword in instruction_list})
 
         # current folder
         self.folder = os.getcwd() if self.PARAMETERS["default_folder"] is None else self.PARAMETERS["default_folder"]
@@ -70,32 +61,21 @@ class CLI(object):
         cursor += 1
 
         if instruction in self.preprocess:
-            # The instruction is recognized by the application, we now branch depending on the internal representation of the instruction.
+            # the instruction is recognized by the application, we now branch depending on the internal representation of the instruction.
             internal_instruction = self.preprocess[instruction]
 
             if internal_instruction == "cd":
                 self.process_change_dir(command, split_command, cursor)
 
-            elif internal_instruction == "folder":
-                self.process_folder()
-
-            elif internal_instruction == "trash":
-                self.process_trash(split_command, cursor)
-
-            elif internal_instruction == "date":
-                self.process_date(split_command, cursor)
-
-            elif internal_instruction == "rename":
-                self.process_rename(split_command, cursor)
-
-            elif internal_instruction == "help":
-                self.process_help(split_command, cursor)
-
-            elif internal_instruction == "sudo":
-                self.process_sudo(split_command, cursor)
-
             elif internal_instruction == "exit":
                 self.exit()
+
+            else:
+                # for instance:
+                # self.process_folder(split_command, cursor)
+                process_instruction = getattr(self, "process_" + internal_instruction)
+                process_instruction(split_command, cursor)
+
         else:
             print(err(f"The input command {command} could not be parsed, because the tool did not understand the term '{instruction}'. If you wish to you can use :\n'>> help'\nThat instruction will bring a list of the available instruction and their use cases."))
 
@@ -128,7 +108,7 @@ class CLI(object):
             except FileNotFoundError as e:
                 print(err(f"Cannot find the '{directory}' directory."))
 
-    def process_folder(self):
+    def process_folder(self, split_command, cursor):
         """
         When the 'folder' command is read.
         """
@@ -213,27 +193,24 @@ class CLI(object):
         else:
             topic = split_command[cursor]
             cursor += 1
-            # Also using the preprocessing dictionary here.
+            # also using the preprocessing dictionary here
             if topic in self.preprocess:
-                # Getting the internal representation.
+                # getting the internal representation
                 internal_instruction = self.preprocess[topic]
 
-                # We can almost grab the help directly, except for the help
-                # keyword itself, whose help section is called "help-twice".
+                # we can almost grab the help directly, except for the help keyword itself, whose help section is called "help-twice"
                 if internal_instruction == "help":
                     internal_instruction == "help-twice"
 
-                # Now we can print the help for the desired instruction.
+                # now we can print the help for the desired instruction.
                 print(self.HELP[internal_instruction])
 
-                # If the instruction was "folder", then we output some more
-                # contextual help.
+                # if the instruction was "folder", then we output some more contextual help
                 if internal_instruction == "folder":
                     for directory in self.EXTENSIONS:
                         print(f"{directory}:".ljust(11, ' '), str(self.EXTENSIONS[directory]), sep='')
                         print(self.HELP["folder-creation"])
-            else:
-                # The instruction is not recognized.
+            else:  # the instruction is not recognized
                 print(self.HELP["other"])
 
     def print_header(self):
