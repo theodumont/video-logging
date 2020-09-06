@@ -6,7 +6,7 @@
 
 Python script that can be used to quickly organize rushes from a video shooting session.
 
-> :warning: Work in progress!
+> :warning: The tool is not perfect but it shouldn't break anything :smile:
 
 ## Table of contents
 
@@ -60,12 +60,3 @@ If you are lost, you can always type `>> help`, or even `>> help <command>` for 
 
 By default, the folders are named `Documents`, `Audio`, `Videos`... But you can change this. In order to do so, just go to `src\data.json` and change the `EXTENSIONS` variable. You can also choose which extension corresponds to which folder by changing the list.
 
-
-
-## To do
-
-- [ ] Add renaming option
-- [x] Add progress bar
-- [x] Add warning when sorting folder where `video-logging` is
-- [x] Notify when folder empty
-- [x] Add other platforms support
