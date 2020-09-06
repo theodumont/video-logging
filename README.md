@@ -6,7 +6,7 @@
 
 Python script that can be used to quickly organize rushes from a video shooting session.
 
-> :warning: The tool is not perfect but it shouldn't break anything :smile:
+> :pushpin: The tool is not perfect but it shouldn't break anything :smile:
 
 ## Table of contents
 
