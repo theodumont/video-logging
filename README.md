@@ -83,11 +83,11 @@ In order to change some stuff, just go to `video-logging/data.json` and change t
 When I have to sort my files after a video shooting, I tend to execute these commands:
 
 ```bash
->>> f    # 'folder' command, sort files
->>> cd Videos
->>> t 3  # 'trash' command, remove videos shorter than 3 seconds
->>> d    # 'date' command, sort files by date
->>> cd $ANY_VIDEO_FOLDER
+>> f    # 'folder' command, sort files
+>> cd Videos
+>> t 3  # 'trash' command, remove videos shorter than 3 seconds
+>> d    # 'date' command, sort files by date
+>> cd $ANY_VIDEO_FOLDER
 # with `open_while_renaming` set to True
->>> r    # renaming videos, moving them to trash if needed
+>> r    # renaming videos, moving them to trash if needed
 ```
