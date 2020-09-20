@@ -6,6 +6,7 @@ video logging process.
 """
 
 import os
+import platform
 import time
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from progress.bar import IncrementalBar
@@ -176,6 +177,7 @@ def rename_files(extensions, open_while_renaming, directory=None):
 
     nb_renamed = 0
     nb_trashed = 0
+    system = platform.system()
     try:
         for file in os.listdir():
             extension = os.path.splitext(file)[-1]
@@ -183,7 +185,7 @@ def rename_files(extensions, open_while_renaming, directory=None):
                 # we don't have to rename this file
                 continue
 
-            if open_while_renaming:
+            if can_open(open_while_renaming, extension, system):
                 # run subprocess
                 process = Popen("start /WAIT " + file, shell=True)
             # loop until new name for file is ok
@@ -193,7 +195,7 @@ def rename_files(extensions, open_while_renaming, directory=None):
                     print("help on renaming")
                     new_name = ""
                 new_name = input(f"[{file}] >> new name: ")
-            if open_while_renaming:
+            if can_open(open_while_renaming, extension, system):
                 # kill subprocess if not closed
                 if process.poll() is None:
                     Process(process.pid).children()[0].kill()
@@ -215,7 +217,7 @@ def rename_files(extensions, open_while_renaming, directory=None):
     except Exception as e:
         print(e)
     finally:
-        if open_while_renaming:
+        if can_open(open_while_renaming, extension, system):
             # kill subprocess if not closed
             if process.poll() is None:
                 Process(process.pid).children()[0].kill()
@@ -232,6 +234,10 @@ def rename_files(extensions, open_while_renaming, directory=None):
             return sentence_trashed
         else:  # both are 0
             return "Nothing has been modified."
+
+
+def can_open(open_while_renaming, extension, system):
+    return open_while_renaming and (system == "Linux" or extension != "")
 
 
 def move_to_dir(file, directory):
