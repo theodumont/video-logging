@@ -146,7 +146,7 @@ def sort_by_date(extensions, sudo, directory=None):
     return f"Files sorted by date."
 
 
-def rename_files(extensions, open_while_renaming, directory=None):
+def rename_files(extensions, open_while_renaming, trash_folder_name, directory=None):
     """Open and rename the files in current directory.
 
     Parameters
@@ -202,7 +202,7 @@ def rename_files(extensions, open_while_renaming, directory=None):
                     time.sleep(.1)
             # use input
             if new_name == "trash":
-                move_to_dir(file, "Trash")
+                move_to_dir(file, trash_folder_name)
                 nb_trashed += 1
             elif new_name == "exit":
                 raise UserInterrupt()  # to leave the two loops

@@ -154,14 +154,14 @@ class CLI(object):
         """
         if len(split_command) == cursor:
             # i.e. we have no more arguments available
-            print(info(fun.rename_files(self.EXTENSIONS, self.open_while_renaming)))
+            print(info(fun.rename_files(self.EXTENSIONS, self.open_while_renaming, self.trash_folder_name)))
         else:
             directory = split_command[cursor]
             cursor += 1
             if directory not in self.EXTENSIONS:
                 print(err(f"{directory} is not a valid directory. Please input a valid directory."))
             else:
-                print(info(fun.rename_files(self.EXTENSIONS, self.open_while_renaming, directory)))
+                print(info(fun.rename_files(self.EXTENSIONS, self.open_while_renaming, self.trash_folder_name, directory)))
 
 
     def process_sudo(self, split_command, cursor):
