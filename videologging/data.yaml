@@ -3,7 +3,7 @@ PARAMETERS:
   default_sudo: False  # if you want to start in sudo mode by default
   default_folder: null  # where you want the tool to boot. Must be a string like "C:/users/foo"
   trash_folder_name: !!str Trash  # name of default folder for trashing files
-  open_while_renaming: True  # whether or not opening files while renaming them
+  open_while_renaming: False  # whether or not opening files while renaming them
 EXTENSIONS:  # you can customize the extensions lists and even create new categories
   Audio:
   - .wav
@@ -140,6 +140,7 @@ HELP:
     '>> rename $directory'
     where $directory is the type of files you want to rename. If $directory is not specified, all files are going to be examined.
     By default, the tool does not open the file one by one while renaming them, but you can activate this option in the video-logging/data.yaml file.
+    If you rename a file as 'trash', the file is directly moved into a trash folder.
   sudo: |
     If these python scripts are moved by the tool, bad things may happen. Therefore by default, the tool checks if the current directory contains the 'video-logging' folder in its arborescence by looking for the '.videolog' file. This process is usually quite fast but it may take a while when dealing with big directories. The 'sudo' command allows to deactivate this checking, increasing the speed of the tool:
     '>> sudo on'

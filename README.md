@@ -4,7 +4,11 @@
 
 # Video logging for editing
 
-Python script that can be used to quickly organize rushes from a video shooting session.
+Python script that can be used to quickly organize rushes from a video shooting session, by:
+
+- sorting files (type, date)
+- renaming files
+- removing very short videos
 
 > :pushpin: The tool is not perfect but don't worry, it doesn't break anything :smile:
 
@@ -13,6 +17,7 @@ Python script that can be used to quickly organize rushes from a video shooting 
 1. [ Installation ](#1-installation)
 2. [ How to use ](#2-how-to-use)
 3. [ Customize ](#3-customize)
+4. [ Example ](#4-example)
 
 ## 1. Installation
 
@@ -72,3 +77,17 @@ You can customize a number of elements of the tool:
 - whether or not opening files while renaming them.
 
 In order to change some stuff, just go to `video-logging/data.json` and change the values of the variables.
+
+## 4. Example
+
+When I have to sort my files after a video shooting, I tend to execute these commands:
+
+```bash
+>>> f    # 'folder' command, sort files
+>>> cd Videos
+>>> t 3  # 'trash' command, remove videos shorter than 3 seconds
+>>> d    # 'date' command, sort files by date
+>>> cd $ANY_VIDEO_FOLDER
+# with `open_while_renaming` set to True
+>>> r    # renaming videos, moving them to trash if needed
+```
